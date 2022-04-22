@@ -13,7 +13,8 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import {
-  GoogleAuthProvider, signInWithEmailAndPassword,
+  GoogleAuthProvider,
+  signInWithEmailAndPassword,
   signInWithPopup
 } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
@@ -149,13 +150,13 @@ export default function SignIn() {
               </Grid>
             </Grid>
           </Box>
-          <Typography component="body">OR</Typography>
+          <Typography>OR</Typography>
           <Button
-            variant="outlined"
-            sx={styles.googleButton}
+            variant="contained"
+            fullWidth
             onClick={() => signInWithGoggle()}
           >
-            <GoogleIcon className="provider-icons" />
+            <GoogleIcon sx={{ mr: "10px" }} />
             Continue with Google
           </Button>
         </Box>
