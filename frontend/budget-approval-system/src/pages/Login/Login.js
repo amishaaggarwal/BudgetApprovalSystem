@@ -1,18 +1,27 @@
 import GoogleIcon from "@mui/icons-material/Google";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import {
-  Avatar, Box, Button, Checkbox, Container, CssBaseline, FormControlLabel, Grid,
-  Link, TextField, Typography
+  Avatar,
+  Box,
+  Button,
+  Checkbox,
+  Container,
+  CssBaseline,
+  FormControlLabel,
+  Grid,
+  Link,
+  TextField,
+  Typography,
 } from "@mui/material";
 import {
   GoogleAuthProvider,
   signInWithEmailAndPassword,
-  signInWithPopup
+  signInWithPopup,
 } from "firebase/auth";
-import { useNavigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { auth } from "util/Firebase/FirebaseSetup.js";
-import { setLocalStorage } from "util/Storage/Storage.js";
+import { getLocalStorage, setLocalStorage } from "util/Storage/Storage.js";
 import styles from "./Login.style.js";
 
 function Copyright(props) {
@@ -35,6 +44,7 @@ function Copyright(props) {
 
 export default function SignIn() {
   const navigate = useNavigate();
+  const user = JSON.parse(getLocalStorage("user"));
   const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
@@ -89,7 +99,9 @@ export default function SignIn() {
       });
   };
 
-  return (
+  return user ? (
+    <Navigate to="/dashboard" />
+  ) : (
     <Container component="main" maxWidth="xs">
       <CssBaseline />
       <Box sx={styles.outerBox}>
