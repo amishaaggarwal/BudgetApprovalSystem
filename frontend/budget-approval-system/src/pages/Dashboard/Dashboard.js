@@ -22,6 +22,7 @@ import {
     secondaryListItems
 } from "components/Listitems/listItems";
 import Orders from "components/Orders/Orders";
+import AppTheme from "Constants/AppTheme";
 import * as React from "react";
 
 function Copyright(props) {
@@ -88,8 +89,6 @@ const Drawer = styled(MuiDrawer, {
   },
 }));
 
-const mdTheme = createTheme();
-
 function DashboardContent() {
   const [open, setOpen] = React.useState(true);
   const toggleDrawer = () => {
@@ -97,7 +96,7 @@ function DashboardContent() {
   };
 
   return (
-    <ThemeProvider theme={mdTheme}>
+    <ThemeProvider theme={AppTheme}>
       <Box sx={{ display: "flex" }}>
         <CssBaseline />
         <AppBar position="absolute" open={open}>
