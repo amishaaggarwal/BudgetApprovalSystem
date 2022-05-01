@@ -20,7 +20,7 @@ import Typography from "@mui/material/Typography";
 import Deposits from "components/Deposits/Deposits";
 import {
   mainListItems,
-  secondaryListItems,
+  secondaryListItems
 } from "components/Listitems/listItems";
 import Orders from "components/Orders/Orders";
 import AppTheme from "Constants/AppTheme";
