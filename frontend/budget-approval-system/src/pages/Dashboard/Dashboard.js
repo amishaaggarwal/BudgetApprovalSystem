@@ -1,4 +1,5 @@
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
+import LogoutIcon from "@mui/icons-material/Logout";
 import MenuIcon from "@mui/icons-material/Menu";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import MuiAppBar from "@mui/material/AppBar";
@@ -13,17 +14,21 @@ import IconButton from "@mui/material/IconButton";
 import Link from "@mui/material/Link";
 import List from "@mui/material/List";
 import Paper from "@mui/material/Paper";
-import { createTheme, styled, ThemeProvider } from "@mui/material/styles";
+import { styled, ThemeProvider } from "@mui/material/styles";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import Deposits from "components/Deposits/Deposits";
 import {
-    mainListItems,
-    secondaryListItems
+  mainListItems,
+  secondaryListItems,
 } from "components/Listitems/listItems";
 import Orders from "components/Orders/Orders";
 import AppTheme from "Constants/AppTheme";
+import { signOut } from "firebase/auth";
 import * as React from "react";
+import { useNavigate } from "react-router-dom";
+import { auth } from "util/Firebase/FirebaseSetup";
+import { clearLocalStorage } from "util/Storage/Storage";
 
 function Copyright(props) {
   return (
@@ -91,10 +96,20 @@ const Drawer = styled(MuiDrawer, {
 
 function DashboardContent() {
   const [open, setOpen] = React.useState(true);
+  const navigate = useNavigate();
   const toggleDrawer = () => {
     setOpen(!open);
   };
-
+  const handleLogout = () => {
+    signOut(auth)
+      .then(() => {
+        clearLocalStorage();
+        navigate("/");
+      })
+      .catch((error) => {
+        // An error happened.
+      });
+  };
   return (
     <ThemeProvider theme={AppTheme}>
       <Box sx={{ display: "flex" }}>
@@ -130,6 +145,9 @@ function DashboardContent() {
               <Badge badgeContent={4} color="secondary">
                 <NotificationsIcon />
               </Badge>
+            </IconButton>
+            <IconButton color="inherit" onClick={handleLogout}>
+              <LogoutIcon />
             </IconButton>
           </Toolbar>
         </AppBar>
