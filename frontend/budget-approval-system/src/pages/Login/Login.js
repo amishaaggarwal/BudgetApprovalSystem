@@ -20,6 +20,7 @@ import {
 import {
   GoogleAuthProvider,
   RecaptchaVerifier,
+  sendPasswordResetEmail,
   signInWithEmailAndPassword,
   signInWithPhoneNumber,
   signInWithPopup,
@@ -51,7 +52,9 @@ function Copyright(props) {
 
 export default function SignIn() {
   const [open, setOpen] = useState(false);
+  const [resetPasswordOpen, setResetPasswordOpen] = useState(false);
   const [otp, setOtp] = useState("");
+  const [email, setEmail] = useState("");
   const [submit, setSubmit] = useState(false);
   const [phoneNumber, setPhoneNumber] = useState("+91");
   const navigate = useNavigate();
@@ -113,7 +116,9 @@ export default function SignIn() {
   const handleClose = () => {
     setOpen(false);
   };
-
+  const handleForgotPasswordClose = () => {
+    setResetPasswordOpen(false);
+  };
   const otpRecieved = () => {
     let confirmationResult = window.confirmationResult;
     confirmationResult
@@ -164,7 +169,21 @@ export default function SignIn() {
         });
       });
   };
-
+  const resetPassword = () => {
+    sendPasswordResetEmail(auth, email).then(() => {
+        toast.success("Password reset email sent successfully!", {
+          theme: "dark",
+          position: "top-right",
+        });
+      })
+      .catch((error) => {
+        let index = error.message.indexOf("/");
+        toast.error(error.message.slice(index + 1, -2), {
+          theme: "dark",
+          position: "top-right",
+        });
+      });
+  };
   const otpFunction = () => {
     setSubmit(true);
     let res;
@@ -217,9 +236,14 @@ export default function SignIn() {
           </Button>
           <Grid container>
             <Grid item xs>
-              <Link href="#" variant="body2">
+              <Button
+                variant="standard"
+                onClick={() => {
+                  setResetPasswordOpen(true);
+                }}
+              >
                 Forgot password?
-              </Link>
+              </Button>
             </Grid>
           </Grid>
         </Box>
@@ -277,6 +301,31 @@ export default function SignIn() {
         </DialogContent>
         <DialogActions>
           <Button onClick={() => otpFunction()}>Submit</Button>
+        </DialogActions>
+      </Dialog>
+      <Dialog onClose={handleForgotPasswordClose} open={resetPasswordOpen}>
+        <DialogTitle>Forgot Password</DialogTitle>
+        <DialogContent>
+          <TextField
+            autoFocus
+            margin="dense"
+            label="Email"
+            defaultValue=""
+            type="email"
+            fullWidth
+            variant="standard"
+            onChange={(e) => setEmail(e.target.value)}
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button
+            onClick={() => {
+              handleForgotPasswordClose();
+              resetPassword();
+            }}
+          >
+            Submit
+          </Button>
         </DialogActions>
       </Dialog>
     </Container>
