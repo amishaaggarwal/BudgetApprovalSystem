@@ -1,29 +1,33 @@
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
+import LogoutIcon from "@mui/icons-material/Logout";
 import MenuIcon from "@mui/icons-material/Menu";
 import NotificationsIcon from "@mui/icons-material/Notifications";
-import MuiAppBar from "@mui/material/AppBar";
-import Badge from "@mui/material/Badge";
-import Box from "@mui/material/Box";
-import Container from "@mui/material/Container";
-import CssBaseline from "@mui/material/CssBaseline";
-import Divider from "@mui/material/Divider";
-import MuiDrawer from "@mui/material/Drawer";
-import Grid from "@mui/material/Grid";
-import IconButton from "@mui/material/IconButton";
-import Link from "@mui/material/Link";
-import List from "@mui/material/List";
-import Paper from "@mui/material/Paper";
-import { createTheme, styled, ThemeProvider } from "@mui/material/styles";
-import Toolbar from "@mui/material/Toolbar";
-import Typography from "@mui/material/Typography";
-import Deposits from "components/Deposits/Deposits";
 import {
-    mainListItems,
-    secondaryListItems
+  Badge,
+  Box, Button, Container,
+  CssBaseline,
+  Divider, Grid,
+  IconButton,
+  Link, MuiAppBar, MuiDrawer, Paper,
+  Toolbar,
+  Typography
+} from "@mui/material";
+import List from "@mui/material/List";
+import { styled, ThemeProvider } from "@mui/material/styles";
+import Deposits from "components/Deposits/Deposits";
+import DialogComponent from "components/DialogComponent/DialogComponent";
+import {
+  mainListItems,
+  secondaryListItems
 } from "components/Listitems/listItems";
+import NewBill from "components/NewBill/NewBill";
 import Orders from "components/Orders/Orders";
 import AppTheme from "Constants/AppTheme";
-import * as React from "react";
+import { signOut } from "firebase/auth";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { auth } from "util/Firebase/FirebaseSetup";
+import { clearLocalStorage } from "util/Storage/Storage";
 
 function Copyright(props) {
   return (
@@ -90,9 +94,22 @@ const Drawer = styled(MuiDrawer, {
 }));
 
 function DashboardContent() {
-  const [open, setOpen] = React.useState(true);
+  const [open, setOpen] = useState(true);
+  const [openNewBill, setOpenNewBill] = useState(false);
+
+  const navigate = useNavigate();
   const toggleDrawer = () => {
     setOpen(!open);
+  };
+  const handleLogout = () => {
+    signOut(auth)
+      .then(() => {
+        clearLocalStorage();
+        navigate("/");
+      })
+      .catch((error) => {
+        // An error happened.
+      });
   };
 
   return (
@@ -130,6 +147,9 @@ function DashboardContent() {
               <Badge badgeContent={4} color="secondary">
                 <NotificationsIcon />
               </Badge>
+            </IconButton>
+            <IconButton color="inherit" onClick={handleLogout}>
+              <LogoutIcon />
             </IconButton>
           </Toolbar>
         </AppBar>
@@ -196,6 +216,12 @@ function DashboardContent() {
               <Grid item xs={12}>
                 <Paper sx={{ p: 2, display: "flex", flexDirection: "column" }}>
                   <Orders />
+                  <Button
+                    variant="contained"
+                    onClick={() => setOpenNewBill(true)}
+                  >
+                    Submit New Bill
+                  </Button>
                 </Paper>
               </Grid>
             </Grid>
@@ -203,6 +229,15 @@ function DashboardContent() {
           </Container>
         </Box>
       </Box>
+      <DialogComponent
+        title="New Bill"
+        open={openNewBill}
+        handleClose={() => {
+          setOpenNewBill(false);
+        }}
+      >
+        <NewBill />
+      </DialogComponent>
     </ThemeProvider>
   );
 }
