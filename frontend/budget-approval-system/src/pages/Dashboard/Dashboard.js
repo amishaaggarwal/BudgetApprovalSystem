@@ -2,22 +2,18 @@ import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import LogoutIcon from "@mui/icons-material/Logout";
 import MenuIcon from "@mui/icons-material/Menu";
 import NotificationsIcon from "@mui/icons-material/Notifications";
-import { Button } from "@mui/material";
-import MuiAppBar from "@mui/material/AppBar";
-import Badge from "@mui/material/Badge";
-import Box from "@mui/material/Box";
-import Container from "@mui/material/Container";
-import CssBaseline from "@mui/material/CssBaseline";
-import Divider from "@mui/material/Divider";
-import MuiDrawer from "@mui/material/Drawer";
-import Grid from "@mui/material/Grid";
-import IconButton from "@mui/material/IconButton";
-import Link from "@mui/material/Link";
+import {
+  Badge,
+  Box, Button, Container,
+  CssBaseline,
+  Divider, Grid,
+  IconButton,
+  Link, MuiAppBar, MuiDrawer, Paper,
+  Toolbar,
+  Typography
+} from "@mui/material";
 import List from "@mui/material/List";
-import Paper from "@mui/material/Paper";
 import { styled, ThemeProvider } from "@mui/material/styles";
-import Toolbar from "@mui/material/Toolbar";
-import Typography from "@mui/material/Typography";
 import Deposits from "components/Deposits/Deposits";
 import DialogComponent from "components/DialogComponent/DialogComponent";
 import {
