@@ -2,6 +2,7 @@ import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import LogoutIcon from "@mui/icons-material/Logout";
 import MenuIcon from "@mui/icons-material/Menu";
 import NotificationsIcon from "@mui/icons-material/Notifications";
+import { Button } from "@mui/material";
 import MuiAppBar from "@mui/material/AppBar";
 import Badge from "@mui/material/Badge";
 import Box from "@mui/material/Box";
@@ -18,14 +19,16 @@ import { styled, ThemeProvider } from "@mui/material/styles";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import Deposits from "components/Deposits/Deposits";
+import DialogComponent from "components/DialogComponent/DialogComponent";
 import {
   mainListItems,
   secondaryListItems
 } from "components/Listitems/listItems";
+import NewBill from "components/NewBill/NewBill";
 import Orders from "components/Orders/Orders";
 import AppTheme from "Constants/AppTheme";
 import { signOut } from "firebase/auth";
-import * as React from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { auth } from "util/Firebase/FirebaseSetup";
 import { clearLocalStorage } from "util/Storage/Storage";
@@ -95,7 +98,9 @@ const Drawer = styled(MuiDrawer, {
 }));
 
 function DashboardContent() {
-  const [open, setOpen] = React.useState(true);
+  const [open, setOpen] = useState(true);
+  const [openNewBill, setOpenNewBill] = useState(false);
+
   const navigate = useNavigate();
   const toggleDrawer = () => {
     setOpen(!open);
@@ -110,6 +115,7 @@ function DashboardContent() {
         // An error happened.
       });
   };
+
   return (
     <ThemeProvider theme={AppTheme}>
       <Box sx={{ display: "flex" }}>
@@ -214,6 +220,12 @@ function DashboardContent() {
               <Grid item xs={12}>
                 <Paper sx={{ p: 2, display: "flex", flexDirection: "column" }}>
                   <Orders />
+                  <Button
+                    variant="contained"
+                    onClick={() => setOpenNewBill(true)}
+                  >
+                    Submit New Bill
+                  </Button>
                 </Paper>
               </Grid>
             </Grid>
@@ -221,6 +233,15 @@ function DashboardContent() {
           </Container>
         </Box>
       </Box>
+      <DialogComponent
+        title="New Bill"
+        open={openNewBill}
+        handleClose={() => {
+          setOpenNewBill(false);
+        }}
+      >
+        <NewBill />
+      </DialogComponent>
     </ThemeProvider>
   );
 }
