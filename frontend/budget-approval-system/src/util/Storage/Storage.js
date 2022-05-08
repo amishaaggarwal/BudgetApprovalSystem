@@ -1,5 +1,5 @@
 export function getLocalStorage(endpoint) {
-  return localStorage.getItem(endpoint);
+  return JSON.parse(localStorage.getItem(endpoint));
 }
 
 export function setLocalStorage(endpoint, user) {

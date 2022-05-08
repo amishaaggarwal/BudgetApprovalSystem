@@ -99,7 +99,7 @@ const Drawer = styled(MuiDrawer, {
   },
 }));
 
-function DashboardContent() {
+function DashboardContent(props) {
   const [open, setOpen] = useState(true);
   const [openNewBill, setOpenNewBill] = useState(false);
 
@@ -125,7 +125,7 @@ function DashboardContent() {
         <AppBar position="absolute" open={open}>
           <Toolbar
             sx={{
-              pr: "24px", // keep right padding when drawer closed
+              pr: "24px",
             }}
           >
             <IconButton
@@ -147,7 +147,7 @@ function DashboardContent() {
               noWrap
               sx={{ flexGrow: 1 }}
             >
-              Dashboard
+              {props.heading ? props.heading : "Dashboard"}
             </Typography>
             <IconButton color="inherit">
               <Badge badgeContent={4} color="secondary">
@@ -248,6 +248,6 @@ function DashboardContent() {
   );
 }
 
-export default function Dashboard() {
-  return <DashboardContent />;
+export default function Dashboard(props) {
+  return <DashboardContent heading={props.heading ? props.heading : null} />;
 }

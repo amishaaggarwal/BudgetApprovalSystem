@@ -72,12 +72,14 @@ export default function SignIn() {
       toast.success(`Logged-in Success!`, {
         theme: "dark",
       });
+      const obj = {
+        name: user.user.displayName,
+        email: data.get("email"),
+      };
+      console.log(obj);
       setLocalStorage(
         "user",
-        JSON.stringify({
-          name: user.user.displayName,
-          email: data.get("email"),
-        })
+        JSON.stringify(obj)
       );
       navigate("/dashboard");
     } catch (error) {
@@ -126,13 +128,12 @@ export default function SignIn() {
       .then((result) => {
         // User signed in successfully.
         const user = result.user;
-        // ...
         setLocalStorage("user", user.uid);
-        var credential = auth.PhoneAuthProvider.credential(
-          confirmationResult.verificationId,
-          otp
-        );
-        auth().signInWithCredential(credential);
+        // var credential = auth.PhoneAuthProvider.credential(
+        //   confirmationResult.verificationId,
+        //   otp
+        // );
+        // auth().signInWithCredential(credential);
         navigate("/dashboard");
       })
       .catch((error) => {
@@ -279,7 +280,6 @@ export default function SignIn() {
                   parseInt(e.target.value.slice(-1)) >= 0 &&
                   parseInt(e.target.value.slice(-1)) <= 9
                 ) {
-                  console.log(phoneNumber);
                   setPhoneNumber(e.target.value);
                 }
               }}
@@ -289,17 +289,16 @@ export default function SignIn() {
               autoFocus
               margin="dense"
               label="OTP"
-              defaultValue=""
-              value={otp}
+              defaultValue={otp}
               type="number"
               fullWidth
               variant="standard"
               onChange={(e) => setOtp(e.target.value)}
             />
           )}
-          <Box id="recaptcha-container"></Box>
         </DialogContent>
         <DialogActions>
+          <Box id="recaptcha-container"></Box>
           <Button onClick={() => otpFunction()}>Submit</Button>
         </DialogActions>
       </Dialog>
