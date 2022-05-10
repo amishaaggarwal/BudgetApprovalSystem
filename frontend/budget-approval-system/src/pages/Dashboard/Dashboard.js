@@ -34,6 +34,8 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { auth } from "util/Firebase/FirebaseSetup";
 import { clearLocalStorage } from "util/Storage/Storage";
+import { toast } from "react-toastify";
+import styles from "./Dashboard.style";
 
 function Copyright(props) {
   return (
@@ -107,6 +109,7 @@ function DashboardContent(props) {
   const toggleDrawer = () => {
     setOpen(!open);
   };
+
   const handleLogout = () => {
     signOut(auth)
       .then(() => {
@@ -114,7 +117,10 @@ function DashboardContent(props) {
         navigate("/");
       })
       .catch((error) => {
-        // An error happened.
+        toast.error(error, {
+          theme: "dark",
+          position: "top-center",
+        });
       });
   };
 
@@ -160,14 +166,7 @@ function DashboardContent(props) {
           </Toolbar>
         </AppBar>
         <Drawer variant="permanent" open={open}>
-          <Toolbar
-            sx={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "flex-end",
-              px: [1],
-            }}
-          >
+          <Toolbar sx={styles.toolbar}>
             <IconButton onClick={toggleDrawer}>
               <ChevronLeftIcon />
             </IconButton>
@@ -194,42 +193,28 @@ function DashboardContent(props) {
           <Toolbar />
           <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
             <Grid container spacing={3}>
-              {/* Chart */}
-              <Grid item xs={12} md={8} lg={9}>
-                <Paper
-                  sx={{
-                    p: 2,
-                    display: "flex",
-                    flexDirection: "column",
-                    height: 240,
-                  }}
-                ></Paper>
-              </Grid>
               {/* Recent Deposits */}
               <Grid item xs={12} md={4} lg={3}>
-                <Paper
-                  sx={{
-                    p: 2,
-                    display: "flex",
-                    flexDirection: "column",
-                    height: 240,
-                  }}
-                >
+                <Paper sx={styles.paper}>
                   <Deposits />
                 </Paper>
               </Grid>
               {/* Recent Orders */}
-              <Grid item xs={12}>
-                <Paper sx={{ p: 2, display: "flex", flexDirection: "column" }}>
-                  <Orders />
-                  <Button
-                    variant="contained"
-                    onClick={() => setOpenNewBill(true)}
+              {!props.heading && (
+                <Grid item xs={12}>
+                  <Paper
+                    sx={{ p: 2, display: "flex", flexDirection: "column" }}
                   >
-                    Submit New Bill
-                  </Button>
-                </Paper>
-              </Grid>
+                    <Orders />
+                    <Button
+                      variant="contained"
+                      onClick={() => setOpenNewBill(true)}
+                    >
+                      Submit New Bill
+                    </Button>
+                  </Paper>
+                </Grid>
+              )}
             </Grid>
             <Copyright sx={{ pt: 4 }} />
           </Container>

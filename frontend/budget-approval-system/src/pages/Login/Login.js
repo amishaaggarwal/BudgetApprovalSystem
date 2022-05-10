@@ -15,15 +15,13 @@ import {
   Grid,
   Link,
   TextField,
-  Typography,
+  Typography
 } from "@mui/material";
 import {
-  GoogleAuthProvider,
-  RecaptchaVerifier,
-  sendPasswordResetEmail,
-  signInWithEmailAndPassword,
+  GoogleAuthProvider, RecaptchaVerifier,
+  sendPasswordResetEmail, signInWithEmailAndPassword,
   signInWithPhoneNumber,
-  signInWithPopup,
+  signInWithPopup
 } from "firebase/auth";
 import { useState } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
@@ -58,7 +56,7 @@ export default function SignIn() {
   const [submit, setSubmit] = useState(false);
   const [phoneNumber, setPhoneNumber] = useState("+91");
   const navigate = useNavigate();
-  const user = JSON.parse(getLocalStorage("user"));
+  const user = getLocalStorage("user");
   const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
@@ -76,11 +74,7 @@ export default function SignIn() {
         name: user.user.displayName,
         email: data.get("email"),
       };
-      console.log(obj);
-      setLocalStorage(
-        "user",
-        JSON.stringify(obj)
-      );
+      setLocalStorage("user", JSON.stringify(obj));
       navigate("/dashboard");
     } catch (error) {
       let index = error.message.indexOf("/");
@@ -129,11 +123,6 @@ export default function SignIn() {
         // User signed in successfully.
         const user = result.user;
         setLocalStorage("user", user.uid);
-        // var credential = auth.PhoneAuthProvider.credential(
-        //   confirmationResult.verificationId,
-        //   otp
-        // );
-        // auth().signInWithCredential(credential);
         navigate("/dashboard");
       })
       .catch((error) => {
@@ -153,6 +142,7 @@ export default function SignIn() {
       },
       auth
     );
+
     const appVerifier = window.recaptchaVerifier;
     signInWithPhoneNumber(auth, phoneNumber, appVerifier)
       .then((confirmationResult) => {
@@ -171,7 +161,8 @@ export default function SignIn() {
       });
   };
   const resetPassword = () => {
-    sendPasswordResetEmail(auth, email).then(() => {
+    sendPasswordResetEmail(auth, email)
+      .then(() => {
         toast.success("Password reset email sent successfully!", {
           theme: "dark",
           position: "top-right",
