@@ -1,8 +1,7 @@
-import { Stack, TextField, Box, Button, Typography } from "@mui/material";
+import { Box, Button, Stack, TextField } from "@mui/material";
 import { useState } from "react";
 
 function NewBill() {
-  const [files, setFiles] = useState([]);
   const [newBill, setNewBill] = useState({
     project_name: "",
     date_of_issue: "",
@@ -11,48 +10,13 @@ function NewBill() {
     applied_to: "",
     amount: "",
   });
-  const [message, setMessage] = useState("");
-  const handleInputChange = (e) => {
-    const files = e.target.files;
 
-    if (files.length) {
-      setMessage(`${newBill.bill_document.label} ${files.item(0).name}`);
-      setFiles(files);
-    }
-  };
   const handleChange = (e) => {
     const data = newBill;
     data[e.target.name] = e.target.value;
     setNewBill(data);
   };
-  const handleSendFiles = () => {
-    console.log(files[0]);
 
-    // this.state.files
-  };
-
-  function ActionBar(props) {
-    return (
-      props.enabled && (
-        <Button variant="contained" onClick={props.onSendClick}>
-          Bill Document
-        </Button>
-      )
-    );
-  }
-
-  function MessageBox(props) {
-    return props.message.length > 0 && <Typography>{props.message}</Typography>;
-  }
-
-  function InputFile(props) {
-    return (
-      <label className="InputFile">
-        Bill Document{" "}
-        <input type="file" name="bill_document" onChange={props.onChange} />
-      </label>
-    );
-  }
   const handleSubmit = () => {};
   return (
     <Stack
@@ -103,9 +67,16 @@ function NewBill() {
         variant="outlined"
       />
       <Box>
-        <InputFile onChange={handleInputChange} />
-        <MessageBox message={message} />
-        <ActionBar enabled={files.length > 0} onSendClick={handleSendFiles} />
+        <label className="InputFile" htmlFor="bd">
+          Bill Document{" "}
+          <input
+            type="file"
+            id="bd"
+            name="bill_document"
+            accept=".pdf"
+            onChange={handleChange}
+          />
+        </label>
       </Box>
       <Button variant="contained" type="submit">
         Submit
