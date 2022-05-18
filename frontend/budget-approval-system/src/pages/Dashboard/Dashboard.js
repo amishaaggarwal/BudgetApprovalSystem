@@ -14,17 +14,17 @@ import {
   Link,
   Paper,
   Toolbar,
-  Typography,
+  Typography
 } from "@mui/material";
-import MuiDrawer from "@mui/material/Drawer";
 import MuiAppBar from "@mui/material/AppBar";
+import MuiDrawer from "@mui/material/Drawer";
 import List from "@mui/material/List";
 import { styled, ThemeProvider } from "@mui/material/styles";
 import Deposits from "components/Deposits/Deposits";
 import DialogComponent from "components/DialogComponent/DialogComponent";
 import {
   mainListItems,
-  secondaryListItems,
+  secondaryListItems
 } from "components/Listitems/listItems";
 import NewBill from "components/NewBill/NewBill";
 import Orders from "components/Orders/Orders";
@@ -32,9 +32,9 @@ import AppTheme from "Constants/AppTheme";
 import { signOut } from "firebase/auth";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 import { auth } from "util/Firebase/FirebaseSetup";
 import { clearLocalStorage } from "util/Storage/Storage";
-import { toast } from "react-toastify";
 import styles from "./Dashboard.style";
 
 function Copyright(props) {
