@@ -6,7 +6,7 @@
 ### Create virtual enviroment
 
 - python3 -m venv env [In window]
-- env/Scripts/activate [In window]
+- env\Scripts\activate [In window]
 - python3 -m venv env [In Linux]
 - source env/bin/activate [In Linux]
 
