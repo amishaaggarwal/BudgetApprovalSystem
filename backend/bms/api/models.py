@@ -38,7 +38,7 @@ class CustomUser(AbstractUser):
     objects = CustomUserManager()
 
     def __str__(self):
-        return f"<{self.email}><{self.first_name} {self.last_name}>"
+        return f"<Id:{self.id}><Email:{self.email}><Name:{self.first_name} {self.last_name}>"
 
 
 class Bill(models.Model):
@@ -47,6 +47,7 @@ class Bill(models.Model):
     bill_document = models.FileField(
         upload_to='bill_documents/', null=True, blank=True)
     bill_status = models.BooleanField(default=False)
+    amount = models.IntegerField(null=True)
     comments = models.TextField()
     approved_by = models.ForeignKey(
         "CustomUser", on_delete=models.CASCADE, related_name='approved_by')
@@ -55,4 +56,13 @@ class Bill(models.Model):
         "CustomUser", on_delete=models.CASCADE, related_name='issued_by')
 
     def __str__(self):
-        return f"<{self.project_name}> <{self.issued_by}>"
+        return f"<BillId:{self.id}> <{self.project_name}> <{self.issued_by}>"
+
+
+class Notification(models.Model):
+    notification_text = models.TextField()
+    notification_by = models.ForeignKey(
+        "CustomUser", on_delete=models.CASCADE, related_name='notification_by')
+
+    def __str__(self):
+        return f"<NotificationId:{self.id}> <{self.notification_by}>"
