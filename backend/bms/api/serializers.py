@@ -48,10 +48,11 @@ class NotificationSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Notification
-        fields = ('id', 'notification_text', 'notification_by')
+        fields = ('id', 'notification_text',
+                  'notification_by', 'notification_for')
 
 
 class NotificationSerializerPost(serializers.ModelSerializer):
     class Meta:
         model = Notification
-        fields = ('notification_text', 'notification_by')
+        fields = ('notification_text', 'notification_by', 'notification_for')
