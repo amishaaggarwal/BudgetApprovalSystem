@@ -22,6 +22,10 @@
 - then check on
 - http://127.0.0.1:8000/
 
+
+## Check Documentation of API
+-- https://documenter.getpostman.com/view/19244026/UyxqCNxq
+
 ## Accesing Admin
 
 - http://127.0.0.1:8000/admin

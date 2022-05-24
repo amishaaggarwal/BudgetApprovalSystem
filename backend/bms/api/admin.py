@@ -4,6 +4,7 @@ from .models import CustomUser, Bill, Notification
 # Register your models here.
 
 admin.site.register(CustomUser)
+admin.site.register(Bill)
 
 
 @admin.register(Bill)
