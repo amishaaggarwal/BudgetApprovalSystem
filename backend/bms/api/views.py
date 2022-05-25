@@ -108,7 +108,7 @@ def employee_bill_detail(request, emp_id, bill_id):
 @permission_classes([IsAuthenticated])
 def notification(request, emp_id):
     if request.method == 'GET':
-        query = Notification.objects.filter(notification_by=emp_id)
+        query = Notification.objects.filter(notification_for=emp_id)
         serializers = NotificationSerializer(query, many=True)
         return JsonResponse(serializers.data, safe=False)
     elif request.method == 'POST':
@@ -118,13 +118,13 @@ def notification(request, emp_id):
         if notification_serializer.is_valid():
             notification_serializer.save()
             return JsonResponse(notification_serializer.data, status=status.HTTP_201_CREATED)
-        return JsonResponse({"msg": "You have reached your limit for notification"}, status=status.HTTP_400_BAD_REQUEST)
+        return JsonResponse([], status=status.HTTP_400_BAD_REQUEST)
     return JsonResponse([], status=status.HTTP_400_BAD_REQUEST)
 
 
 @api_view(['DELETE'])
 @permission_classes([IsAuthenticated])
-def notification_delete(request,notification_id):
+def notification_delete(request, notification_id):
     if request.method == 'DELETE':
         q = Notification.objects.get(id=notification_id)
         q.delete()
