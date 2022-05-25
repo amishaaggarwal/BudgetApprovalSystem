@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.0/ref/settings/
 """
 
+import django_heroku
 from datetime import datetime, timedelta
 from pathlib import Path
 import os
@@ -76,6 +77,13 @@ MIDDLEWARE = [
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:8000",
     "http://0.0.0.0:5000",
+    'https://localhost:3000',
+]
+
+CORS_ORIGIN_WHITELIST = [
+    'https://localhost:3000',
+    'http://localhost',
+    '127.0.0.1',
 ]
 
 ALLOWED_HOSTS = ['*']
@@ -90,7 +98,7 @@ ROOT_URLCONF = 'bms.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [BASE_DIR / 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -165,5 +173,11 @@ STATIC_URL = '/static/'
 # STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 VENV_PATH = os.path.dirname(BASE_DIR)
 STATIC_ROOT = os.path.join(VENV_PATH, 'static_root')
-import django_heroku
 django_heroku.settings(locals())
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_USE_TLS = True
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'im.anaghkumar@gmail.com'
+EMAIL_HOST_PASSWORD = 'Target@27'
