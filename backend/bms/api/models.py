@@ -63,6 +63,8 @@ class Notification(models.Model):
     notification_text = models.TextField()
     notification_by = models.ForeignKey(
         "CustomUser", on_delete=models.CASCADE, related_name='notification_by')
+    notification_for = models.ForeignKey(
+        "CustomUser", on_delete=models.CASCADE, related_name='notification_for')
 
     def __str__(self):
         return f"<NotificationId:{self.id}> <{self.notification_by}>"
