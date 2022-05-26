@@ -38,12 +38,12 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'rest_framework.authtoken',
-    'corsheaders',
     'rest_framework',
     'rest_framework_swagger',
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'api'
+    'corsheaders',
 
 ]
 
@@ -70,8 +70,33 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    "corsheaders.middleware.CorsMiddleware",
     "django.middleware.common.CommonMiddleware"
+    "corsheaders.middleware.CorsMiddleware",
+]
+
+CORS_ORIGIN_ALLOW_ALL = True
+
+CORS_ALLOW_CREDENTIALS = True
+
+
+CORS_ALLOW_METHODS = [
+    "DELETE",
+    "GET",
+    "OPTIONS",
+    "PATCH",
+    "POST",
+    "PUT",
+]
+CORS_ALLOW_HEADERS = [
+    "accept",
+    "accept-encoding",
+    "authorization",
+    "content-type",
+    "dnt",
+    "origin",
+    "user-agent",
+    "x-csrftoken",
+    "x-requested-with",
 ]
 
 CORS_ALLOWED_ORIGINS = [
@@ -82,14 +107,12 @@ CORS_ALLOWED_ORIGINS = [
 
 CORS_ORIGIN_WHITELIST = [
     'https://localhost:3000',
+    "http://localhost:8000",
     'http://localhost',
     '127.0.0.1',
 ]
 
 ALLOWED_HOSTS = ['*']
-
-CORS_ORIGIN_ALLOW_ALL = True
-
 
 AUTH_USER_MODEL = 'api.CustomUser'
 
