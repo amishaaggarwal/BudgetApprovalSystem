@@ -14,4 +14,6 @@ urlpatterns = [
     path('notification/<int:emp_id>', notification),
     path('notification/delete/<int:notification_id>',
          notification_delete, name="delete notification"),
+    path('check/email/', email_check, name="email_check"),
+    path('check/mobile/', mobile_check, name="mobile_check"),
 ]

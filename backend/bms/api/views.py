@@ -1,3 +1,4 @@
+from django.http import HttpResponse
 from rest_framework import status
 from rest_framework.parsers import JSONParser
 from django.http.response import JsonResponse
@@ -8,6 +9,10 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from django.contrib.auth import authenticate
 from rest_framework_simplejwt.tokens import RefreshToken
+from django.conf import settings
+from django.core.mail import send_mail
+from django.template.loader import render_to_string, get_template
+from django.core.mail import EmailMessage
 
 
 @api_view(['GET'])
@@ -78,7 +83,25 @@ def approve_bill(request, bill_id):
     if request.method == 'POST':
         q = Bill.objects.get(id=bill_id)
         q.bill_status = True
+        q.save()
         serializer = BillSerializer(q)
+        ctx = {
+            'name': CustomUser.objects.get(id=q.issued_by.id).first_name,
+            'manager': CustomUser.objects.get(id=q.approved_by.id).first_name,
+        }
+        email = CustomUser.objects.get(id=q.issued_by.id).email
+        subject = 'Bill is Approved'
+        message = get_template('email.html').render(ctx)
+        email_from = settings.EMAIL_HOST_USER
+        recipient_list = [email, ]
+        mail = EmailMessage(
+            subject=subject,
+            body=message,
+            from_email=email_from,
+            to=recipient_list,
+        )
+        mail.content_subtype = "html"
+        mail.send()
         return JsonResponse(serializer.data, safe=False)
     return JsonResponse([], status=status.HTTP_400_BAD_REQUEST)
 
@@ -129,4 +152,28 @@ def notification_delete(request, notification_id):
         q = Notification.objects.get(id=notification_id)
         q.delete()
         return JsonResponse({"msg": "Deleted"}, status=status.HTTP_200_OK)
+    return JsonResponse([], status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['POST'])
+def email_check(request):
+    if request.method == 'POST':
+        email = request.data.get("email", None)
+        q = CustomUser.objects.filter(email=email).first()
+        if q is None:
+            return JsonResponse({"msg": "Email not found"}, status=status.HTTP_200_OK)
+        else:
+            return JsonResponse({"msg": "Email found", "id": q.id}, status=status.HTTP_200_OK)
+    return JsonResponse([], status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['POST'])
+def mobile_check(request):
+    if request.method == 'POST':
+        mobile = request.data.get("mobile", None)
+        q = CustomUser.objects.filter(mobile=mobile).first()
+        if q is None:
+            return JsonResponse({"msg": "Mobile not found"}, status=status.HTTP_200_OK)
+        else:
+            return JsonResponse({"msg": "Mobile found", "id": q.id}, status=status.HTTP_200_OK)
     return JsonResponse([], status=status.HTTP_400_BAD_REQUEST)

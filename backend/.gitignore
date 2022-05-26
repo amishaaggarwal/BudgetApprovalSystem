@@ -4,3 +4,4 @@ __pycache__/
 .idea/
 bill_documents/
 docs/
+.env
