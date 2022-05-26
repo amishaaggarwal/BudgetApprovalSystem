@@ -42,7 +42,7 @@ INSTALLED_APPS = [
     'rest_framework_swagger',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'api'
+    'api',
     'corsheaders',
 
 ]
@@ -70,7 +70,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    "django.middleware.common.CommonMiddleware"
+    "django.middleware.common.CommonMiddleware",
     "corsheaders.middleware.CorsMiddleware",
 ]
 
