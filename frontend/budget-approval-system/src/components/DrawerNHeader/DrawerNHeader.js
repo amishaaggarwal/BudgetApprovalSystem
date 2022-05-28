@@ -102,7 +102,7 @@ export const SecondaryListItems = () => {
       label: "My Bills",
       to: "/dashboard/mybills",
     },
-    { icon: <LogoutIcon />, label: "Logout", to: "/" },
+    // { icon: <LogoutIcon />, label: "Logout", to: "/" },
   ];
   return (
     <React.Fragment>

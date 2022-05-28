@@ -89,7 +89,7 @@ function BillTable(props) {
       }}
     >
       <Title>{props.emp ? "My Bills" : "Bills"}</Title>
-      {billData.length >= 1 && (
+      {billData.length >= 1 ? (
         <Table sx={{ minWidth: 650 }} aria-label="simple table">
           <TableHead>
             <TableRow>
@@ -119,7 +119,7 @@ function BillTable(props) {
             ))}
           </TableBody>
         </Table>
-      )}
+      ):<h1>No data to display!</h1>}
       {props.emp && (
         <Button
           variant="contained"
