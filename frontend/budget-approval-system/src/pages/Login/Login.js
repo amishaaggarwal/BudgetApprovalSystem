@@ -15,13 +15,17 @@ import {
   Grid,
   Link,
   TextField,
-  Typography
+  Typography,
 } from "@mui/material";
+import axios from "axios";
+import { BASE_URL, LOGIN } from "Constants/apiURLs.js";
 import {
-  GoogleAuthProvider, RecaptchaVerifier,
-  sendPasswordResetEmail, signInWithEmailAndPassword,
+  GoogleAuthProvider,
+  RecaptchaVerifier,
+  sendPasswordResetEmail,
+  signInWithEmailAndPassword,
   signInWithPhoneNumber,
-  signInWithPopup
+  signInWithPopup,
 } from "firebase/auth";
 import { useState } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
@@ -62,20 +66,28 @@ export default function SignIn() {
     const data = new FormData(event.currentTarget);
 
     try {
-      const user = await signInWithEmailAndPassword(
-        auth,
-        data.get("email"),
-        data.get("password")
-      );
-      toast.success(`Logged-in Success!`, {
-        theme: "dark",
-      });
-      const obj = {
-        name: user.user.displayName,
-        email: data.get("email"),
-      };
-      setLocalStorage("user", JSON.stringify(obj));
-      navigate("/dashboard");
+      // const user = await signInWithEmailAndPassword(
+      //   auth,
+      //   data.get("email"),
+      //   data.get("password")
+      // );
+      axios
+        .post(`${BASE_URL}${LOGIN}`, {
+          email: data.get("email"),
+          password: data.get("password"),
+        })
+        .then((res) => {
+          toast.success(`Logged-in Success!`, {
+            theme: "dark",
+          });
+          const obj = {
+            id: res.data.id,
+            token: res.data.access,
+            email: data.get("email"),
+          };
+          setLocalStorage("user", JSON.stringify(obj));
+          navigate("/dashboard");
+        });
     } catch (error) {
       let index = error.message.indexOf("/");
       toast.error(error.message.slice(index + 1, -2), {

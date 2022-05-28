@@ -1,23 +1,63 @@
-import { Box, Button, Stack, TextField } from "@mui/material";
-import { useState } from "react";
+import { Box, Button, OutlinedInput, Stack, TextField } from "@mui/material";
+import FormControl from "@mui/material/FormControl";
+import InputLabel from "@mui/material/InputLabel";
+import MenuItem from "@mui/material/MenuItem";
+import Select from "@mui/material/Select";
+import axios from "axios";
+import { BASE_URL, BILLS, GET_MANAGERS } from "Constants/apiURLs";
+import { useCallback, useEffect, useState } from "react";
+import { toast } from "react-toastify";
+import { getLocalStorage } from "util/Storage/Storage";
 
-function NewBill() {
+function NewBill(props) {
+  const { handleClose } = props;
+  const d = new Date();
+  const data = JSON.parse(getLocalStorage("user"));
+  const [list, setList] = useState([]);
   const [newBill, setNewBill] = useState({
     project_name: "",
-    date_of_issue: "",
-    bill_document: "",
-    department: "",
-    applied_to: "",
     amount: "",
+    date_of_issue: d.toISOString().substring(0, 10),
+    // bill_document: "",
+    comments: "",
+    approved_by: "",
+    approved_on: "",
+    issued_by: data.id.toString(),
   });
 
+  const getManagerList = useCallback(() => {
+    axios.get(`${BASE_URL}${GET_MANAGERS}`).then((res) => {
+      setList(res.data);
+    });
+  }, []);
+
+  useEffect(() => {
+    getManagerList();
+  }, [getManagerList]);
+
   const handleChange = (e) => {
-    const data = newBill;
-    data[e.target.name] = e.target.value;
-    setNewBill(data);
+    const field = newBill;
+    field[e.target.name] = e.target.value;
+    setNewBill(field);
   };
 
-  const handleSubmit = () => {};
+  const handleSubmit = () => {
+    newBill.amount = parseInt(newBill.amount);
+    console.log("Submit", JSON.stringify(newBill));
+    axios
+      .post(`${BASE_URL}${BILLS}${data.id}`, JSON.stringify(newBill), {
+        headers: {
+          Authorization: `Bearer ${data.token}`,
+        },
+      })
+      .then(() => {
+        handleClose();
+        toast.success("Bill added successfully", {
+          theme: "dark",
+          position: "top-center",
+        });
+      });
+  };
   return (
     <Stack
       spacing={2}
@@ -32,36 +72,30 @@ function NewBill() {
         label="Project Name"
         type="text"
         variant="outlined"
+        name="project_name"
         onChange={handleChange}
       />
-      <TextField
-        id="outlined-basic"
-        defaultValue={newBill.date_of_issue}
-        label="Date of Issue"
-        type="date"
-        variant="outlined"
-        onChange={handleChange}
-      />
-      <TextField
-        id="outlined-basic"
-        defaultValue={newBill.department}
-        label="Department"
-        type="text"
-        variant="outlined"
-        onChange={handleChange}
-      />
-      <TextField
-        id="outlined-basic"
-        defaultValue={newBill.applied_to}
-        label="Manager"
-        type="text"
-        onChange={handleChange}
-        variant="outlined"
-      />
+      <FormControl fullWidth>
+        <InputLabel id="demo-simple-select-label">Manager</InputLabel>
+        <Select
+          labelId="demo-simple-select-label"
+          id="demo-simple-select"
+          name="approved_by"
+          input={<OutlinedInput label="Manager" />}
+          onChange={handleChange}
+        >
+          {list.map((row) => (
+            <MenuItem value={row.id.toString()} key={row.id}>
+              {`${row.first_name} ${row.last_name} (${row.email})`}
+            </MenuItem>
+          ))}
+        </Select>
+      </FormControl>
       <TextField
         id="outlined-basic"
         defaultValue={newBill.amount}
         onChange={handleChange}
+        name="amount"
         label="Bill Amount"
         type="text"
         variant="outlined"
@@ -78,7 +112,17 @@ function NewBill() {
           />
         </label>
       </Box>
-      <Button variant="contained" type="submit">
+      <TextField
+        id="outlined-basic"
+        multiline
+        defaultValue={newBill.comments}
+        onChange={handleChange}
+        name="comments"
+        label="Comments"
+        type="text"
+        variant="outlined"
+      />
+      <Button variant="contained" onClick={handleSubmit}>
         Submit
       </Button>
     </Stack>

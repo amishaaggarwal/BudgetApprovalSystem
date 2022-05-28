@@ -1,27 +1,63 @@
-import { Stack } from "@mui/material";
+import { CardContent, Stack, Typography } from "@mui/material";
 import Card from "@mui/material/Card";
-import CardContent from "@mui/material/CardContent";
-import Typography from "@mui/material/Typography";
+import axios from "axios";
 import Title from "components/Title/Title";
+import { BASE_URL, EMPLOYEES } from "Constants/apiURLs";
+import { useCallback, useEffect, useState } from "react";
+import { getLocalStorage } from "util/Storage/Storage";
 
-function UserCard(props) {
-  const user = {
-    Name: `${props.data.first_name} ${props.data.last_name}`,
-    Designation: props.data.designation,
-    Mobile: props.data.mobile,
-    Email: props.data.email,
-    Gender: props.data.gender,
-    Address: `${props.data.address},${props.data.city},${props.data.state},${props.data.country}`,
-    DOJ: props.data.date_of_joining,
-    DOB: props.data.dob,
-  };
+function UserCard() {
+  const data = JSON.parse(getLocalStorage("user"));
+  // const token = data.token;
+  const id = data.id;
+  const [user, setUser] = useState({});
+  const [ed, setEd] = useState({});
+  const getEmployeeData = useCallback(() => {
+    axios
+      .get( `${ BASE_URL }${ EMPLOYEES }${ id }`
+        // , {
+        // headers: {
+        //   Authorization: "Bearer " + token,
+        // },
+        // }
+      )
+      .then((res) => {
+        const result = res.data;
+        const userData = {
+          Name: `${result.first_name} ${result.last_name}`,
+          Designation: result.designation,
+          Mobile: result.mobile,
+          Email: result.email,
+          Gender: result.gender,
+          Address: `${result.address},${result.city},${result.state},${result.country}`,
+          DOJ: result.date_of_joining,
+          DOB: result.dob,
+        };
+        setUser(userData);
+        const edu = {
+          education_12th_percentage: result.education_12th_percentage,
+          education_10th_percentage: result.education_10th_percentage,
+          education_grad_percentage: result.education_grad_percentage,
+        };
+        setEd(edu);
+      });
+  }, [id]);
+
+  useEffect(() => {
+    getEmployeeData();
+  }, [getEmployeeData]);
 
   return (
     <Card>
       <CardContent>
         <Title>{user.Name}</Title>
-        {Object.entries(user).map((row) => (
-          <Stack direction="row" spacing={1} sx={{ alignItems: "center" }}>
+        {Object.entries(user).map((row, i) => (
+          <Stack
+            direction="row"
+            key={i}
+            spacing={1}
+            sx={{ alignItems: "center" }}
+          >
             <Typography variant="body1" color="text.primary">
               {`${row[0]}:`}
             </Typography>
@@ -40,7 +76,7 @@ function UserCard(props) {
                 10th Percentage:
               </Typography>
               <Typography variant="body2" color="text.secondary">
-                {`${props.data.education_10th_percentage}%`}
+                {`${ed.education_10th_percentage}%`}
               </Typography>
             </Stack>
             <Stack direction="row" spacing={1} sx={{ alignItems: "center" }}>
@@ -48,7 +84,7 @@ function UserCard(props) {
                 12th Percentage:
               </Typography>
               <Typography variant="body2" color="text.secondary">
-                {`${props.data.education_12th_percentage}%`}
+                {`${ed.education_12th_percentage}%`}
               </Typography>
             </Stack>
             <Stack direction="row" spacing={1} sx={{ alignItems: "center" }}>
@@ -56,7 +92,7 @@ function UserCard(props) {
                 Graduation Percentage:
               </Typography>
               <Typography variant="body2" color="text.secondary">
-                {`${props.data.education_grad_percentage}%`}
+                {`${ed.education_grad_percentage}%`}
               </Typography>
             </Stack>
           </Stack>
