@@ -8,20 +8,17 @@ import { getLocalStorage } from "util/Storage/Storage";
 
 function UserCard() {
   const data = JSON.parse(getLocalStorage("user"));
-  // const token = data.token;
+  const token = data.token;
   const id = data.id;
   const [user, setUser] = useState({});
   const [ed, setEd] = useState({});
   const getEmployeeData = useCallback(() => {
     axios
-      .get(
-        `${BASE_URL}${EMPLOYEES}${id}`
-        // , {
-        // headers: {
-        //   Authorization: "Bearer " + token,
-        // },
-        // }
-      )
+      .get(`${BASE_URL}${EMPLOYEES}${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
       .then((res) => {
         const result = res.data;
         const userData = {
@@ -42,13 +39,13 @@ function UserCard() {
         };
         setEd(edu);
       });
-  }, [id]);
+  }, [id, token]);
 
   useEffect(() => {
     getEmployeeData();
   }, [getEmployeeData]);
 
-  return user.length>0?(
+  return user.length > 0 ? (
     <Card>
       <CardContent>
         <Title>{user.Name}</Title>
@@ -67,42 +64,43 @@ function UserCard() {
             </Typography>
           </Stack>
         ))}
-         
-          <Stack direction="row" spacing={1} sx={{ alignItems: "center" }}>
-            <Typography variant="body1" color="text.primary">
-              Education:
-            </Typography>
-            <Stack direction="column">
-              <Stack direction="row" spacing={1} sx={{ alignItems: "center" }}>
-                <Typography variant="body2" color="text.secondary">
-                  10th Percentage:
-                </Typography>
-                <Typography variant="body2" color="text.secondary">
-                  {`${ed.education_10th_percentage}%`}
-                </Typography>
-              </Stack>
-              <Stack direction="row" spacing={1} sx={{ alignItems: "center" }}>
-                <Typography variant="body2" color="text.secondary">
-                  12th Percentage:
-                </Typography>
-                <Typography variant="body2" color="text.secondary">
-                  {`${ed.education_12th_percentage}%`}
-                </Typography>
-              </Stack>
-              <Stack direction="row" spacing={1} sx={{ alignItems: "center" }}>
-                <Typography variant="body2" color="text.secondary">
-                  Graduation Percentage:
-                </Typography>
-                <Typography variant="body2" color="text.secondary">
-                  {`${ed.education_grad_percentage}%`}
-                </Typography>
-              </Stack>
+
+        <Stack direction="row" spacing={1} sx={{ alignItems: "center" }}>
+          <Typography variant="body1" color="text.primary">
+            Education:
+          </Typography>
+          <Stack direction="column">
+            <Stack direction="row" spacing={1} sx={{ alignItems: "center" }}>
+              <Typography variant="body2" color="text.secondary">
+                10th Percentage:
+              </Typography>
+              <Typography variant="body2" color="text.secondary">
+                {`${ed.education_10th_percentage}%`}
+              </Typography>
+            </Stack>
+            <Stack direction="row" spacing={1} sx={{ alignItems: "center" }}>
+              <Typography variant="body2" color="text.secondary">
+                12th Percentage:
+              </Typography>
+              <Typography variant="body2" color="text.secondary">
+                {`${ed.education_12th_percentage}%`}
+              </Typography>
+            </Stack>
+            <Stack direction="row" spacing={1} sx={{ alignItems: "center" }}>
+              <Typography variant="body2" color="text.secondary">
+                Graduation Percentage:
+              </Typography>
+              <Typography variant="body2" color="text.secondary">
+                {`${ed.education_grad_percentage}%`}
+              </Typography>
             </Stack>
           </Stack>
-        
+        </Stack>
       </CardContent>
     </Card>
-  ):<h1>No Data To Display!</h1>;
+  ) : (
+    <h1>No Data To Display!</h1>
+  );
 }
 
 export default UserCard;

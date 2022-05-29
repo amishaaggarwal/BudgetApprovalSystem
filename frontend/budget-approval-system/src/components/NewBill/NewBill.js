@@ -4,7 +4,12 @@ import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
 import axios from "axios";
-import { BASE_URL, BILLS, GET_MANAGERS } from "Constants/apiURLs";
+import {
+  BASE_URL,
+  BILLS,
+  GET_MANAGERS,
+  NOTIFICATIONS,
+} from "Constants/apiURLs";
 import { useCallback, useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { getLocalStorage } from "util/Storage/Storage";
@@ -43,15 +48,25 @@ function NewBill(props) {
 
   const handleSubmit = () => {
     newBill.amount = parseInt(newBill.amount);
-    console.log("Submit", JSON.stringify(newBill));
+    console.log("Submit", newBill);
     axios
-      .post(`${BASE_URL}${BILLS}${data.id}`, JSON.stringify(newBill), {
+      .post(`${BASE_URL}${BILLS}${data.id}`, newBill, {
         headers: {
           Authorization: `Bearer ${data.token}`,
         },
       })
       .then(() => {
         handleClose();
+        const notification_push = {
+          notification_text: `Bill Applied by ${data.email}`,
+          notification_by: data.id,
+          notification_for: newBill.approved_by,
+        };
+        axios.post(`${BASE_URL}${NOTIFICATIONS}${data.id}`, notification_push, {
+          headers: {
+            Authorization: `Bearer ${data.token}`,
+          },
+        });
         toast.success("Bill added successfully", {
           theme: "dark",
           position: "top-center",
@@ -100,7 +115,7 @@ function NewBill(props) {
         type="text"
         variant="outlined"
       />
-      <Box>
+      {/* <Box>
         <label className="InputFile" htmlFor="bd">
           Bill Document{" "}
           <input
@@ -111,7 +126,7 @@ function NewBill(props) {
             onChange={handleChange}
           />
         </label>
-      </Box>
+      </Box> */}
       <TextField
         id="outlined-basic"
         multiline

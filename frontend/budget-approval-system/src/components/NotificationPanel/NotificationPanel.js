@@ -14,7 +14,11 @@ import {
   Typography,
 } from "@mui/material";
 import axios from "axios";
-import { BASE_URL, DELETE_NOTIFICATION, NOTIFICATIONS } from "Constants/apiURLs";
+import {
+  BASE_URL,
+  DELETE_NOTIFICATION,
+  NOTIFICATIONS,
+} from "Constants/apiURLs";
 import React, { useCallback, useEffect, useState } from "react";
 import { getLocalStorage } from "util/Storage/Storage";
 
@@ -66,18 +70,20 @@ function NotificationPanel() {
 
   const open = Boolean(anchorEl);
 
-   const deleteNotification = (nid) => {
-     const new_list = [];
-     notifications.forEach((row) => {
-       if (row.id !== nid) new_list.push(row);
-     });
-     setNotifications(new_list);
-     axios.delete(`${BASE_URL}${DELETE_NOTIFICATION}${nid}`, {
-       headers: {
-         Authorization: `Bearer ${data.token}`,
-       },
-     });
-   };
+  const deleteNotification = (nid) => {
+    const new_list = [];
+    notifications.forEach((row) => {
+      if (row.id !== nid) new_list.push(row);
+    });
+    setNotifications(new_list);
+    axios.delete(`${BASE_URL}${DELETE_NOTIFICATION}${nid}`, {
+      headers: {
+        Authorization: `Bearer ${data.token}`,
+      },
+    });
+  };
+
+  // const markAllRead = () => {};
   return (
     <div>
       <IconButton color="inherit" onClick={handleClick}>
@@ -98,10 +104,18 @@ function NotificationPanel() {
           sx={{
             width: "100%",
             maxWidth: 360,
-            maxHeight: "90vh",
             bgcolor: "background.paper",
           }}
         >
+          <Typography
+            variant="h5"
+            color="#90CAF9"
+            component="div"
+            sx={{ padding: "1px 20px" }}
+          >
+            Notifications
+          </Typography>
+          <Divider />
           {notifications.map((row, i) => (
             <Box key={i}>
               <ListItem alignItems="flex-start">
@@ -116,13 +130,14 @@ function NotificationPanel() {
                         sx={{ display: "inline" }}
                         component="span"
                         variant="body2"
-                        color="text.primary"
+                        color="text.secondary"
                       >
                         {row.notification_text}
                       </Typography>
                       <Button
                         fullWidth
                         variant="text"
+                        size="small"
                         sx={{ justifyContent: "right" }}
                         onClick={() => {
                           deleteNotification(row.id);
@@ -138,6 +153,14 @@ function NotificationPanel() {
             </Box>
           ))}
         </List>
+        {/* <Button
+          fullWidth
+          variant="contained"
+          size="large"
+          onClick={markAllRead}
+        >
+          Mark All as read
+        </Button> */}
       </Popover>
     </div>
   );
