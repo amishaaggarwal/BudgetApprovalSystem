@@ -16,7 +16,7 @@ from django.core.mail import EmailMessage
 
 
 @api_view(['GET'])
-@permission_classes([IsAuthenticated])
+# @permission_classes([IsAuthenticated])
 def employee_detail(request, id):
     if request.method == 'GET':
         if CustomUser.objects.filter(id=id).exists():
@@ -50,7 +50,7 @@ def login_view(request):
 
 
 @api_view(['GET'])
-@permission_classes([IsAuthenticated])
+# @permission_classes([IsAuthenticated])
 def employee_only_all(request):
     query = CustomUser.objects.filter(role="employee")
     if request.method == 'GET':
@@ -59,7 +59,7 @@ def employee_only_all(request):
 
 
 @api_view(['GET', 'POST', 'PUT'])
-@permission_classes([IsAuthenticated])
+# @permission_classes([IsAuthenticated])
 def employee_bill(request, emp_id):
     if request.method == 'GET':
         query = Bill.objects.filter(issued_by__id=emp_id)
@@ -78,7 +78,7 @@ def employee_bill(request, emp_id):
 
 
 @api_view(['POST'])
-@permission_classes([IsAuthenticated])
+# @permission_classes([IsAuthenticated])
 def approve_bill(request, bill_id):
     if request.method == 'POST':
         q = Bill.objects.get(id=bill_id)
@@ -107,7 +107,7 @@ def approve_bill(request, bill_id):
 
 
 @api_view(['GET', 'PUT'])
-@permission_classes([IsAuthenticated])
+# @permission_classes([IsAuthenticated])
 def employee_bill_detail(request, emp_id, bill_id):
     if request.method == 'GET':
         query = Bill.objects.filter(issued_by__id=emp_id, id=bill_id)
@@ -128,7 +128,7 @@ def employee_bill_detail(request, emp_id, bill_id):
 
 
 @api_view(['GET', 'POST'])
-@permission_classes([IsAuthenticated])
+# @permission_classes([IsAuthenticated])
 def notification(request, emp_id):
     if request.method == 'GET':
         query = Notification.objects.filter(notification_for=emp_id)
@@ -146,7 +146,7 @@ def notification(request, emp_id):
 
 
 @api_view(['DELETE'])
-@permission_classes([IsAuthenticated])
+# @permission_classes([IsAuthenticated])
 def notification_delete(request, notification_id):
     if request.method == 'DELETE':
         q = Notification.objects.get(id=notification_id)
