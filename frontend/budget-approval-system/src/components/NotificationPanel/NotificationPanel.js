@@ -1,0 +1,138 @@
+import NotificationsIcon from "@mui/icons-material/Notifications";
+import {
+  Avatar,
+  Badge,
+  Box,
+  Button,
+  Divider,
+  IconButton,
+  List,
+  ListItem,
+  ListItemAvatar,
+  ListItemText,
+  Popover,
+  Typography,
+} from "@mui/material";
+import axios from "axios";
+import { BASE_URL, NOTIFICATIONS } from "Constants/apiURLs";
+import React, { useCallback, useEffect, useState } from "react";
+import { getLocalStorage } from "util/Storage/Storage";
+
+function NotificationPanel() {
+  const data = JSON.parse(getLocalStorage("user"));
+  const [anchorEl, setAnchorEl] = useState(null);
+  const [notifications, setNotifications] = useState([]);
+
+  const convertAngularBracket = (s) => {
+    let item = s.split("<").slice(1);
+    let arr = [];
+    for (let p of item) {
+      arr.push(p.split(":")[1].split(">")[0]);
+    }
+    return arr;
+  };
+  const fetchNotifications = useCallback(() => {
+    axios
+      .get(`${BASE_URL}${NOTIFICATIONS}${data.id}`, {
+        headers: {
+          Authorization: `Bearer ${data.token}`,
+        },
+      })
+      .then((res) => {
+        const new_data = res.data;
+        new_data.forEach((row) => {
+          row.notification_by = convertAngularBracket(row.notification_by);
+        });
+        setNotifications(new_data);
+      });
+  }, [data.id, data.token]);
+
+  useEffect(() => {
+    fetchNotifications();
+  }, [fetchNotifications]);
+
+  function stringAvatar(name) {
+    return {
+      children: `${name.split(" ")[0][0]}${name.split(" ")[1][0]}`,
+    };
+  }
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  const open = Boolean(anchorEl);
+
+  const deleteNotification = (x) => {
+    setAnchorEl(null);
+    console.log(x);
+  };
+  return (
+    <div>
+      <IconButton color="inherit" onClick={handleClick}>
+        <Badge badgeContent={notifications.length} color="secondary">
+          <NotificationsIcon />
+        </Badge>
+      </IconButton>
+      <Popover
+        open={open}
+        anchorEl={anchorEl}
+        onClose={handleClose}
+        anchorOrigin={{
+          vertical: "bottom",
+          horizontal: "left",
+        }}
+      >
+        <List
+          sx={{
+            width: "100%",
+            maxWidth: 360,
+            maxHeight: "90vh",
+            bgcolor: "background.paper",
+          }}
+        >
+          {notifications.map((row, i) => (
+            <Box key={i}>
+              <ListItem alignItems="flex-start">
+                <ListItemAvatar>
+                  <Avatar {...stringAvatar(row.notification_by[2])} />
+                </ListItemAvatar>
+                <ListItemText
+                  primary={row.notification_by[2]}
+                  secondary={
+                    <React.Fragment>
+                      <Typography
+                        sx={{ display: "inline" }}
+                        component="span"
+                        variant="body2"
+                        color="text.primary"
+                      >
+                        {row.notification_text}
+                      </Typography>
+                      <Button
+                        fullWidth
+                        variant="text"
+                        sx={{ justifyContent: "right" }}
+                        onClick={() => {
+                          deleteNotification(row.id);
+                        }}
+                      >
+                        Mark as read
+                      </Button>
+                    </React.Fragment>
+                  }
+                />
+              </ListItem>
+              <Divider variant="inset" component="li" />
+            </Box>
+          ))}
+        </List>
+      </Popover>
+    </div>
+  );
+}
+
+export default NotificationPanel;

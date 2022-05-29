@@ -3,15 +3,13 @@ import CurrencyRupeeIcon from "@mui/icons-material/CurrencyRupee";
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import LogoutIcon from "@mui/icons-material/Logout";
 import MenuIcon from "@mui/icons-material/Menu";
-import NotificationsIcon from "@mui/icons-material/Notifications";
 import {
-  Badge,
   Box,
   Divider,
   IconButton,
   Toolbar,
   Tooltip,
-  Typography
+  Typography,
 } from "@mui/material";
 import MuiAppBar from "@mui/material/AppBar";
 import MuiDrawer from "@mui/material/Drawer";
@@ -20,6 +18,7 @@ import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import { styled } from "@mui/material/styles";
+import NotificationPanel from "components/NotificationPanel/NotificationPanel";
 import { signOut } from "firebase/auth";
 import * as React from "react";
 import { useState } from "react";
@@ -128,6 +127,7 @@ export const SecondaryListItems = () => {
 
 export const DrawerNHeader = () => {
   const [open, setOpen] = useState(true);
+
   const navigate = useNavigate();
   const toggleDrawer = () => {
     setOpen(!open);
@@ -175,11 +175,7 @@ export const DrawerNHeader = () => {
           >
             Dashboard
           </Typography>
-          <IconButton color="inherit">
-            <Badge badgeContent={4} color="secondary">
-              <NotificationsIcon />
-            </Badge>
-          </IconButton>
+          <NotificationPanel />
           <IconButton color="inherit" onClick={handleLogout}>
             <LogoutIcon />
           </IconButton>
