@@ -7,3 +7,4 @@ export const APPROVE_BILL = "/api/v1/approve_bill/:billid";
 export const BILLS = "/api/v1/bill/";
 export const GET_USER_BILL = "/api/v1/bill/:empId/:billId";
 export const NOTIFICATIONS = "/api/v1/notification/";
+export const DELETE_NOTIFICATION = "/api/v1/notification/delete/";

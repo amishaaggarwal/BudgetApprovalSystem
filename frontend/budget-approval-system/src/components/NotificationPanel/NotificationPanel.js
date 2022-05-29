@@ -14,7 +14,7 @@ import {
   Typography,
 } from "@mui/material";
 import axios from "axios";
-import { BASE_URL, NOTIFICATIONS } from "Constants/apiURLs";
+import { BASE_URL, DELETE_NOTIFICATION, NOTIFICATIONS } from "Constants/apiURLs";
 import React, { useCallback, useEffect, useState } from "react";
 import { getLocalStorage } from "util/Storage/Storage";
 
@@ -66,10 +66,18 @@ function NotificationPanel() {
 
   const open = Boolean(anchorEl);
 
-  const deleteNotification = (x) => {
-    setAnchorEl(null);
-    console.log(x);
-  };
+   const deleteNotification = (nid) => {
+     const new_list = [];
+     notifications.forEach((row) => {
+       if (row.id !== nid) new_list.push(row);
+     });
+     setNotifications(new_list);
+     axios.delete(`${BASE_URL}${DELETE_NOTIFICATION}${nid}`, {
+       headers: {
+         Authorization: `Bearer ${data.token}`,
+       },
+     });
+   };
   return (
     <div>
       <IconButton color="inherit" onClick={handleClick}>
