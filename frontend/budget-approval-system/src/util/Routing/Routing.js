@@ -1,6 +1,4 @@
-import BillTable from "components/BillTable/BillTable";
 import Loader from "components/Loader/Loader";
-import UserCard from "components/UserCard/UserCard";
 import Dashboard from "pages/Dashboard/Dashboard";
 import Login from "pages/Login/Login";
 import { lazy, Suspense } from "react";
@@ -8,6 +6,8 @@ import { Route, Routes } from "react-router-dom";
 import PrivateRoute from "./PrivateRoute";
 
 const Error404 = lazy(() => import("pages/NotFound/Error404"));
+const UserCard = lazy(() => import("components/UserCard/UserCard"));
+const BillTable = lazy( () => import( "components/BillTable/BillTable" ) );
 
 function Routing() {
   return (
