@@ -18,12 +18,16 @@ import {
   Typography,
 } from "@mui/material";
 import axios from "axios";
-import { BASE_URL, LOGIN } from "Constants/apiURLs.js";
+import {
+  BASE_URL,
+  CHECK_EMAIL,
+  CHECK_MOBILE,
+  LOGIN,
+} from "Constants/apiURLs.js";
 import {
   GoogleAuthProvider,
   RecaptchaVerifier,
   sendPasswordResetEmail,
-  signInWithEmailAndPassword,
   signInWithPhoneNumber,
   signInWithPopup,
 } from "firebase/auth";
@@ -101,17 +105,28 @@ export default function SignIn() {
   const signInWithGoogle = () => {
     signInWithPopup(auth, Gprovider)
       .then((result) => {
-        setLocalStorage(
-          "user",
-          JSON.stringify({
-            name: result.user.displayName,
-            email: result.user.email,
-          })
-        );
-        toast.success(`loggedin success`, {
-          theme: "dark",
-        });
-        navigate("/dashboard");
+        axios
+          .post(`${BASE_URL}${CHECK_EMAIL}`, { email: result.user.email })
+          .then((res) => {
+            if (res.data.msg === "Email found") {
+              setLocalStorage(
+                "user",
+                JSON.stringify({
+                  id: res.data.id,
+                  email: result.user.email,
+                  token: "Authorized",
+                })
+              );
+              toast.success(`loggedin success`, {
+                theme: "dark",
+              });
+              navigate("/dashboard");
+            } else {
+              toast.error(`${res.data.msg}`, {
+                theme: "dark",
+              });
+            }
+          });
       })
       .catch((error) => {
         toast.error(error.message, {
@@ -134,8 +149,28 @@ export default function SignIn() {
       .then((result) => {
         // User signed in successfully.
         const user = result.user;
-        setLocalStorage("user", user.uid);
-        navigate("/dashboard");
+        axios
+          .post(`${BASE_URL}${CHECK_MOBILE}`, { mobile: phoneNumber })
+          .then((res) => {
+            if (res.data.msg === "Mobile found") {
+              setLocalStorage(
+                "user",
+                JSON.stringify({
+                  id: res.data.id,
+                  email: "mobile",
+                  token: user.uid,
+                })
+              );
+              toast.success(`loggedin success`, {
+                theme: "dark",
+              });
+              navigate("/dashboard");
+            } else {
+              toast.error(`${res.data.msg}`, {
+                theme: "dark",
+              });
+            }
+          });
       })
       .catch((error) => {
         let index = error.message.indexOf("/");

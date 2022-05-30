@@ -3,7 +3,7 @@ import Card from "@mui/material/Card";
 import Title from "components/Title/Title";
 import { BASE_URL, EMPLOYEES } from "Constants/apiURLs";
 import { useCallback, useEffect, useState } from "react";
-import { getLocalStorage } from "util/Storage/Storage";
+import { getLocalStorage, setLocalStorage } from "util/Storage/Storage";
 
 function UserCard() {
   const data = JSON.parse(getLocalStorage("user"));
@@ -15,6 +15,15 @@ function UserCard() {
     fetch(`${BASE_URL}${EMPLOYEES}${id}/`)
       .then((res) => res.json())
       .then((result) => {
+        if (data.email === "mobile")
+          setLocalStorage(
+            "user",
+            JSON.stringify({
+              id: data.id,
+              email: result.email,
+              token: data.token,
+            })
+          );
         const userData = {
           Name: `${result.first_name} ${result.last_name}`,
           Designation: result.designation,
