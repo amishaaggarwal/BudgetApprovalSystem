@@ -1,6 +1,5 @@
 import { CardContent, Stack, Typography } from "@mui/material";
 import Card from "@mui/material/Card";
-import axios from "axios";
 import Title from "components/Title/Title";
 import { BASE_URL, EMPLOYEES } from "Constants/apiURLs";
 import { useCallback, useEffect, useState } from "react";
@@ -8,19 +7,14 @@ import { getLocalStorage } from "util/Storage/Storage";
 
 function UserCard() {
   const data = JSON.parse(getLocalStorage("user"));
-  const token = data.token;
   const id = data.id;
   const [user, setUser] = useState({});
   const [ed, setEd] = useState({});
+
   const getEmployeeData = useCallback(() => {
-    axios
-      .get(`${BASE_URL}${EMPLOYEES}${id}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
-      .then((res) => {
-        const result = res.data;
+    fetch(`${BASE_URL}${EMPLOYEES}${id}/`)
+      .then((res) => res.json())
+      .then((result) => {
         const userData = {
           Name: `${result.first_name} ${result.last_name}`,
           Designation: result.designation,
@@ -38,14 +32,17 @@ function UserCard() {
           education_grad_percentage: result.education_grad_percentage,
         };
         setEd(edu);
+      })
+      .catch((error) => {
+        console.log(error);
       });
-  }, [id, token]);
+  }, [id]);
 
   useEffect(() => {
     getEmployeeData();
   }, [getEmployeeData]);
 
-  return user.length > 0 ? (
+  return user ? (
     <Card>
       <CardContent>
         <Title>{user.Name}</Title>
