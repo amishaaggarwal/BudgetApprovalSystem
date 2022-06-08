@@ -5,8 +5,8 @@
 
 ### Create virtual enviroment
 
-- python -m venv env [In window]
-- env/script/activate [In window]
+- python3 -m venv env [In window]
+- env\Scripts\activate [In window]
 - python3 -m venv env [In Linux]
 - source env/bin/activate [In Linux]
 
@@ -21,6 +21,10 @@
 - python3 manage.py runserver
 - then check on
 - http://127.0.0.1:8000/
+
+
+## Check Documentation of API
+-- https://documenter.getpostman.com/view/19244026/UyxqCNxq
 
 ## Accesing Admin
 
