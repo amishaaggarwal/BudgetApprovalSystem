@@ -70,7 +70,7 @@ def employee_bill(request, emp_id):
         bill_data = JSONParser().parse(request)
         bill_serializer = BillSerializerPost(data=bill_data)
         if bill_serializer.is_valid():
-            q = Bill.objects.filter(issued_by=bill_data["issued_by"]).__len__()
+            q = Bill.objects.filter(issued_by=emp_id).count()
             if q < 4:
                 bill_serializer.save()
                 return JsonResponse(bill_serializer.data, status=status.HTTP_201_CREATED)
