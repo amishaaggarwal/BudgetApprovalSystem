@@ -25,7 +25,7 @@ function NewBill(props) {
     date_of_issue: d.toISOString().substring(0, 10),
     // bill_document: "",
     comments: "",
-    approved_by: "",
+    approved_by: null,
     approved_on: "",
     issued_by: data.id.toString(),
   });
@@ -96,6 +96,7 @@ function NewBill(props) {
           labelId="demo-simple-select-label"
           id="demo-simple-select"
           name="approved_by"
+          defaultValue=""
           input={<OutlinedInput label="Manager" />}
           onChange={handleChange}
         >
