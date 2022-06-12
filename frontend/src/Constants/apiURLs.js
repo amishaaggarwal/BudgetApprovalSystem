@@ -4,6 +4,7 @@ export const GENERATE_TOKEN = "/api/token";
 export const GET_MANAGERS = "/api/v1/manager/";
 export const LOGIN = "/api/v1/login/";
 export const APPROVE_BILL = "/api/v1/approve_bill/:billid";
+export const BILLS_TO_BE_APPROVED = "/api/v1/bill_info/";
 export const BILLS = "/api/v1/bill/";
 export const GET_USER_BILL = "/api/v1/bill/:empId/:billId";
 export const NOTIFICATIONS = "/api/v1/notification/";

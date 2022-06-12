@@ -14,7 +14,7 @@ import BillCard from "components/BillCard/BillCard";
 import DialogComponent from "components/DialogComponent/DialogComponent";
 import NewBill from "components/NewBill/NewBill";
 import Title from "components/Title/Title";
-import { BASE_URL, BILLS } from "Constants/apiURLs";
+import { BASE_URL, BILLS, BILLS_TO_BE_APPROVED } from "Constants/apiURLs";
 import { useCallback, useEffect, useState } from "react";
 import { getLocalStorage } from "util/Storage/Storage";
 
@@ -44,7 +44,7 @@ function BillTable(props) {
   };
   const fetch_bill_data = useCallback(() => {
     axios
-      .get(`${BASE_URL}${BILLS}${id}`, {
+      .get(`${BASE_URL}${props.emp?BILLS:BILLS_TO_BE_APPROVED}${id}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
