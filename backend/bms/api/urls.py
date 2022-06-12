@@ -16,4 +16,5 @@ urlpatterns = [
          notification_delete, name="delete notification"),
     path('check/email/', email_check, name="email_check"),
     path('check/mobile/', mobile_check, name="mobile_check"),
+    path('bill_info/<int:mgr_id>', get_all_bills_info, name="get_all_bills_info")
 ]
