@@ -28,19 +28,26 @@ function BillCard(props) {
         {/* <Box component="div" sx={styles.pdfBox}>
           <Pdf doc={bill.Document} />
         </Box> */}
-        <Title>{bill["Bill ID"]}</Title>
-        {Object.entries(bill).map((row) => (
-          <Stack direction="row" spacing={1} sx={{ alignItems: "center" }}>
-            <Typography variant="body1" color="text.primary">
-              {`${row[0]}:`}
-            </Typography>
-            <Typography variant="body2" color="text.secondary">
-              {`${row[1]}`}
-            </Typography>
-          </Stack>
-        ))}
+        {/* <Title>{bill["Bill ID"]}</Title> */}
+        <Box p={1}>
+          {Object.entries(bill).map((row, i) => (
+            <Stack
+              direction="row"
+              spacing={1}
+              key={i.toString()}
+              sx={{ alignItems: "center" }}
+            >
+              <Typography variant="body1" color="text.primary">
+                {`${row[0]}:`}
+              </Typography>
+              <Typography variant="body2" color="text.secondary">
+                {`${row[1]}`}
+              </Typography>
+            </Stack>
+          ))}
+        </Box>
         <Divider />
-        <Stack direction="row" spacing={1} sx={{ alignItems: "center" }}>
+        <Stack direction="row" p={1} spacing={1} sx={{ alignItems: "center" }}>
           <Typography variant="body1" color="text.primary">
             Issuer:
           </Typography>
@@ -64,7 +71,7 @@ function BillCard(props) {
           </Stack>
         </Stack>
         <Divider />
-        <Stack direction="row" spacing={1} sx={{ alignItems: "center" }}>
+        <Stack direction="row" spacing={1} p={1} sx={{ alignItems: "center" }}>
           <Typography variant="body1" color="text.primary">
             Approver:
           </Typography>
