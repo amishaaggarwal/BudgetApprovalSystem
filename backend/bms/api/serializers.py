@@ -27,6 +27,14 @@ class BillSerializer(serializers.ModelSerializer):
                   'comments', 'approved_by', 'approved_on', 'issued_by')
 
 
+class EmployeeBillSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Bill
+        fields = ('id', 'project_name', 'amount', 'date_of_issue', 'bill_status',
+                  'comments', 'approved_by', 'approved_on', 'issued_by')
+
+
 class BillSerializerPost(serializers.ModelSerializer):
     class Meta:
         model = Bill
@@ -56,3 +64,9 @@ class NotificationSerializerPost(serializers.ModelSerializer):
     class Meta:
         model = Notification
         fields = ('notification_text', 'notification_by', 'notification_for')
+
+
+class FileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Bill
+        fields = "__all__"
