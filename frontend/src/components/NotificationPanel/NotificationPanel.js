@@ -11,6 +11,7 @@ import {
   ListItemAvatar,
   ListItemText,
   Popover,
+  Tooltip,
   Typography,
 } from "@mui/material";
 import axios from "axios";
@@ -86,11 +87,13 @@ function NotificationPanel() {
   // const markAllRead = () => {};
   return (
     <div>
-      <IconButton color="inherit" onClick={handleClick}>
-        <Badge badgeContent={notifications.length} color="secondary">
-          <NotificationsIcon />
-        </Badge>
-      </IconButton>
+      <Tooltip title="Notifications">
+        <IconButton color="inherit" onClick={handleClick}>
+          <Badge badgeContent={notifications.length} color="secondary">
+            <NotificationsIcon />
+          </Badge>
+        </IconButton>
+      </Tooltip>
       <Popover
         open={open}
         anchorEl={anchorEl}

@@ -79,17 +79,18 @@ export const MainListItems = () => {
   return (
     <React.Fragment>
       {mainList.map((row, i) => (
-        <ListItemButton key={i}>
-          <Tooltip title={row.label}>
-            <ListItemIcon>{row.icon}</ListItemIcon>
-          </Tooltip>
-          <Link
-            to={row.to}
-            style={{ color: "inherit", textDecoration: "inherit" }}
-          >
+        <Link
+          key={i.toString()}
+          to={row.to}
+          style={{ color: "inherit", textDecoration: "inherit" }}
+        >
+          <ListItemButton display="flex">
+            <Tooltip title={row.label}>
+              <ListItemIcon>{row.icon}</ListItemIcon>
+            </Tooltip>
             <ListItemText primary={row.label} />
-          </Link>
-        </ListItemButton>
+          </ListItemButton>
+        </Link>
       ))}
     </React.Fragment>
   );
@@ -101,7 +102,6 @@ export const SecondaryListItems = () => {
       label: "My Bills",
       to: "/dashboard/mybills",
     },
-    // { icon: <LogoutIcon />, label: "Logout", to: "/" },
   ];
   return (
     <React.Fragment>
@@ -109,17 +109,18 @@ export const SecondaryListItems = () => {
         Saved reports
       </ListSubheader> */}
       {secondaryList.map((row, i) => (
-        <ListItemButton key={i}>
-          <Tooltip title={row.label}>
-            <ListItemIcon>{row.icon}</ListItemIcon>
-          </Tooltip>
-          <Link
-            to={row.to}
-            style={{ color: "inherit", textDecoration: "inherit" }}
-          >
+        <Link
+          key={i}
+          to={row.to}
+          style={{ color: "inherit", textDecoration: "inherit" }}
+        >
+          <ListItemButton display="flex">
+            <Tooltip title={row.label}>
+              <ListItemIcon>{row.icon}</ListItemIcon>
+            </Tooltip>
             <ListItemText primary={row.label} />
-          </Link>
-        </ListItemButton>
+          </ListItemButton>
+        </Link>
       ))}
     </React.Fragment>
   );
@@ -176,9 +177,11 @@ export const DrawerNHeader = () => {
             Dashboard
           </Typography>
           <NotificationPanel />
-          <IconButton color="inherit" onClick={handleLogout}>
-            <LogoutIcon />
-          </IconButton>
+          <Tooltip title="Logout">
+            <IconButton color="inherit" onClick={handleLogout}>
+              <LogoutIcon />
+            </IconButton>
+          </Tooltip>
         </Toolbar>
       </AppBar>
       <Drawer variant="permanent" open={open}>
