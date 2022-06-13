@@ -186,7 +186,7 @@ def mobile_check(request):
 def get_all_bills_info(request, mgr_id):
     if mgr_id:
         query = Bill.objects.filter(approved_by=mgr_id).all()
-        serializers = EmployeeBillSerializer(query, many=True)
+        serializers = BillSerializer(query, many=True)
     return JsonResponse(serializers.data, safe=False)
 
 # @api_view(['POST'])
