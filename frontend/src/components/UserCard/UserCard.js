@@ -1,4 +1,12 @@
-import { CardContent, Stack, Typography } from "@mui/material";
+import {
+  Avatar,
+  Box,
+  CardContent,
+  Divider,
+  Stack,
+  Typography,
+} from "@mui/material";
+import { green, purple } from "@mui/material/colors";
 import Card from "@mui/material/Card";
 import Title from "components/Title/Title";
 import { BASE_URL, EMPLOYEES } from "Constants/apiURLs";
@@ -45,8 +53,12 @@ function UserCard() {
       .catch((error) => {
         console.log(error);
       });
-  }, [id]);
-
+  }, [id, data.id, data.email, data.token]);
+  function stringAvatar(name) {
+    return {
+      children: `${name.split(" ")[0][0]}${name.split(" ")[1][0]}`,
+    };
+  }
   useEffect(() => {
     getEmployeeData();
   }, [getEmployeeData]);
@@ -54,52 +66,122 @@ function UserCard() {
   return user ? (
     <Card>
       <CardContent>
-        <Title>{user.Name}</Title>
-        {Object.entries(user).map((row, i) => (
-          <Stack
-            direction="row"
-            key={i}
-            spacing={1}
-            sx={{ alignItems: "center" }}
-          >
+        <Box display="flex" alignItems="center" justifyContent="start">
+          {user.Name && (
+            <Avatar
+              {...stringAvatar(user?.Name)}
+              sx={{ width: 60, height: 60, bgcolor: purple[300], mr: "10px" }}
+            />
+          )}
+          <Title>User Profile</Title>
+        </Box>
+        <Stack direction="column" p={3}>
+          <Stack direction="row" spacing={1} sx={{ alignItems: "center" }}>
             <Typography variant="body1" color="text.primary">
-              {`${row[0]}:`}
+              Name:
             </Typography>
             <Typography variant="body2" color="text.secondary">
-              {`${row[1]}`}
+              {user.Name}
             </Typography>
           </Stack>
-        ))}
+          <Stack direction="row" spacing={1} sx={{ alignItems: "center" }}>
+            <Typography variant="body1" color="text.primary">
+              Designation:
+            </Typography>
+            <Typography variant="body2" color="text.secondary">
+              {user.Designation}
+            </Typography>
+          </Stack>
+        </Stack>
 
-        <Stack direction="row" spacing={1} sx={{ alignItems: "center" }}>
-          <Typography variant="body1" color="text.primary">
+        <Divider />
+        <Stack direction="column" p={3}>
+          <Typography variant="h6" color="primary">
+            Contact Information:
+          </Typography>
+          <Stack direction="row" spacing={1} sx={{ alignItems: "center" }}>
+            <Typography variant="body1" color="text.primary">
+              Mobile:
+            </Typography>
+            <Typography variant="body2" color="text.secondary">
+              {user.Mobile}
+            </Typography>
+          </Stack>
+          <Stack direction="row" spacing={1} sx={{ alignItems: "center" }}>
+            <Typography variant="body1" color="text.primary">
+              Email:
+            </Typography>
+            <Typography variant="body2" color="text.secondary">
+              {user.Email}
+            </Typography>
+          </Stack>
+        </Stack>
+        <Divider />
+        <Stack direction="column" p={3}>
+          <Typography variant="h6" color="primary">
+            Personal Details:
+          </Typography>
+          <Stack direction="row" spacing={1} sx={{ alignItems: "center" }}>
+            <Typography variant="body1" color="text.primary">
+              Gender:
+            </Typography>
+            <Typography variant="body2" color="text.secondary">
+              {user.Gender}
+            </Typography>
+          </Stack>
+          <Stack direction="row" spacing={1} sx={{ alignItems: "center" }}>
+            <Typography variant="body1" color="text.primary">
+              Address:
+            </Typography>
+            <Typography variant="body2" color="text.secondary">
+              {user.Address}
+            </Typography>
+          </Stack>
+          <Stack direction="row" spacing={1} sx={{ alignItems: "center" }}>
+            <Typography variant="body1" color="text.primary">
+              Date of Birth:
+            </Typography>
+            <Typography variant="body2" color="text.secondary">
+              {user.DOB}
+            </Typography>
+          </Stack>
+          <Stack direction="row" spacing={1} sx={{ alignItems: "center" }}>
+            <Typography variant="body1" color="text.primary">
+              Date of Joining:
+            </Typography>
+            <Typography variant="body2" color="text.secondary">
+              {user.DOJ}
+            </Typography>
+          </Stack>
+        </Stack>
+        <Divider />
+        <Stack direction="column" p={3}>
+          <Typography variant="h6" color="primary">
             Education:
           </Typography>
-          <Stack direction="column">
-            <Stack direction="row" spacing={1} sx={{ alignItems: "center" }}>
-              <Typography variant="body2" color="text.secondary">
-                10th Percentage:
-              </Typography>
-              <Typography variant="body2" color="text.secondary">
-                {`${ed.education_10th_percentage}%`}
-              </Typography>
-            </Stack>
-            <Stack direction="row" spacing={1} sx={{ alignItems: "center" }}>
-              <Typography variant="body2" color="text.secondary">
-                12th Percentage:
-              </Typography>
-              <Typography variant="body2" color="text.secondary">
-                {`${ed.education_12th_percentage}%`}
-              </Typography>
-            </Stack>
-            <Stack direction="row" spacing={1} sx={{ alignItems: "center" }}>
-              <Typography variant="body2" color="text.secondary">
-                Graduation Percentage:
-              </Typography>
-              <Typography variant="body2" color="text.secondary">
-                {`${ed.education_grad_percentage}%`}
-              </Typography>
-            </Stack>
+          <Stack direction="row" spacing={1} sx={{ alignItems: "center" }}>
+            <Typography variant="body1" color="text.primary">
+              10th Percentage:
+            </Typography>
+            <Typography variant="body2" color="text.secondary">
+              {`${ed.education_10th_percentage}%`}
+            </Typography>
+          </Stack>
+          <Stack direction="row" spacing={1} sx={{ alignItems: "center" }}>
+            <Typography variant="body1" color="text.primary">
+              12th Percentage:
+            </Typography>
+            <Typography variant="body2" color="text.secondary">
+              {`${ed.education_12th_percentage}%`}
+            </Typography>
+          </Stack>
+          <Stack direction="row" spacing={1} sx={{ alignItems: "center" }}>
+            <Typography variant="body1" color="text.primary">
+              Graduation Percentage:
+            </Typography>
+            <Typography variant="body2" color="text.secondary">
+              {`${ed.education_grad_percentage}%`}
+            </Typography>
           </Stack>
         </Stack>
       </CardContent>

@@ -14,14 +14,18 @@ import BillCard from "components/BillCard/BillCard";
 import DialogComponent from "components/DialogComponent/DialogComponent";
 import NewBill from "components/NewBill/NewBill";
 import Title from "components/Title/Title";
-import { BASE_URL, BILLS } from "Constants/apiURLs";
+import {
+  APPROVE_BILL,
+  BASE_URL,
+  BILLS,
+  BILLS_TO_BE_APPROVED,
+} from "Constants/apiURLs";
 import { useCallback, useEffect, useState } from "react";
 import { getLocalStorage } from "util/Storage/Storage";
 
 function BillTable(props) {
   const [openNewBill, setOpenNewBill] = useState(false);
   const data = JSON.parse(getLocalStorage("user"));
-  const email = data.email;
   const token = data.token;
   const id = data.id;
   const [billData, setBillData] = useState([]);
@@ -35,6 +39,7 @@ function BillTable(props) {
     "More Information",
   ];
   const convertAngularBracket = (s) => {
+    if (typeof s === "number") return s;
     let item = s.split("<").slice(1);
     let arr = [];
     for (let p of item) {
@@ -44,7 +49,7 @@ function BillTable(props) {
   };
   const fetch_bill_data = useCallback(() => {
     axios
-      .get(`${BASE_URL}${BILLS}${id}`, {
+      .get(`${BASE_URL}${props.emp ? BILLS : BILLS_TO_BE_APPROVED}${id}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -55,19 +60,38 @@ function BillTable(props) {
         new_data.forEach((row) => {
           row.issued_by = convertAngularBracket(row.issued_by);
           row.approved_by = convertAngularBracket(row.approved_by);
-          if (props.emp && row.issued_by[2] === email) my_data.push(row);
-          else if (row.approved_by[2] === email) my_data.push(row);
+          // if (props.emp && row.issued_by[2] === email) my_data.push(row);
+          // else if (row.approved_by[2] === email) my_data.push(row);
+          my_data.push(row);
         });
         setBillData(my_data);
       });
-  }, [id, token, email, props.emp]);
+  }, [id, token, props.emp]);
 
+  const approveBill = useCallback(
+    (bill_id) => {
+      axios
+        .post(`${BASE_URL}${APPROVE_BILL}${bill_id}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
+        .then(() => {
+          let new_data = billData;
+          new_data.forEach((row) => {
+            if (row.id === bill_id) row.bill_status = true;
+          });
+          setBillData(new_data);
+        });
+    },
+    [token, billData]
+  );
   const handleClose = () => {
-    setOpenNewBill( false );
-  }
+    setOpenNewBill(false);
+  };
   useEffect(() => {
     fetch_bill_data();
-  }, [fetch_bill_data]);
+  }, [fetch_bill_data, billData]);
 
   const showBillInfo = (row) => {
     setBData(row);
@@ -94,7 +118,7 @@ function BillTable(props) {
           <TableHead>
             <TableRow>
               {table_header.map((row, i) => (
-                <StyledTableCell key={i} align="center">
+                <StyledTableCell key={i.toString()} align="center">
                   {row}
                 </StyledTableCell>
               ))}
@@ -114,12 +138,20 @@ function BillTable(props) {
                 </TableCell>
                 <TableCell align="center">
                   <Button onClick={() => showBillInfo(row)}>View More</Button>
+                  <Button
+                    onClick={() => approveBill(row.id)}
+                    disabled={row.bill_status}
+                  >
+                    Approve
+                  </Button>
                 </TableCell>
               </TableRow>
             ))}
           </TableBody>
         </Table>
-      ):<h1>No data to display!</h1>}
+      ) : (
+        <h1>No data to display!</h1>
+      )}
       {props.emp && (
         <Button
           variant="contained"
