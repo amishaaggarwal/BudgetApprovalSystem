@@ -26,7 +26,7 @@ function NewBill(props) {
     // bill_document: "",
     comments: "",
     approved_by: null,
-    approved_on: "",
+    approved_on: d.toISOString().substring(0, 10),
     issued_by: data.id.toString(),
   });
 
@@ -116,7 +116,7 @@ function NewBill(props) {
         type="text"
         variant="outlined"
       />
-      {/* <Box>
+      <Box>
         <label className="InputFile" htmlFor="bd">
           Bill Document{" "}
           <input
@@ -127,7 +127,7 @@ function NewBill(props) {
             onChange={handleChange}
           />
         </label>
-      </Box> */}
+      </Box>
       <TextField
         id="outlined-basic"
         multiline

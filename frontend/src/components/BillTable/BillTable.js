@@ -19,8 +19,10 @@ import {
   BASE_URL,
   BILLS,
   BILLS_TO_BE_APPROVED,
+  NOTIFICATIONS,
 } from "Constants/apiURLs";
 import { useCallback, useEffect, useState } from "react";
+import { toast } from "react-toastify";
 import { getLocalStorage } from "util/Storage/Storage";
 
 function BillTable(props) {
@@ -28,6 +30,7 @@ function BillTable(props) {
   const data = JSON.parse(getLocalStorage("user"));
   const token = data.token;
   const id = data.id;
+  const email = data.email;
   const [billData, setBillData] = useState([]);
   const [bdata, setBData] = useState([]);
   const [open, setOpen] = useState(false);
@@ -69,7 +72,7 @@ function BillTable(props) {
   }, [id, token, props.emp]);
 
   const approveBill = useCallback(
-    (bill_id) => {
+    (bill_id, client) => {
       axios
         .post(`${BASE_URL}${APPROVE_BILL}${bill_id}`, {
           headers: {
@@ -82,9 +85,27 @@ function BillTable(props) {
             if (row.id === bill_id) row.bill_status = true;
           });
           setBillData(new_data);
+          const notification_push = {
+            notification_text: `Bill Approved by ${email}`,
+            notification_by: id,
+            notification_for: client,
+          };
+          axios.post(
+            `${BASE_URL}${NOTIFICATIONS}${client}`,
+            notification_push,
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            }
+          );
+           toast.success("Bill approved successfully!", {
+             theme: "dark",
+             position: "top-center",
+           });
         });
     },
-    [token, billData]
+    [token, billData, email, id]
   );
   const handleClose = () => {
     setOpenNewBill(false);
@@ -140,7 +161,7 @@ function BillTable(props) {
                   <Button onClick={() => showBillInfo(row)}>View More</Button>
                   {!props.emp && (
                     <Button
-                      onClick={() => approveBill(row.id)}
+                      onClick={() => approveBill(row.id, row.issued_by[0])}
                       disabled={row.bill_status}
                     >
                       Approve
