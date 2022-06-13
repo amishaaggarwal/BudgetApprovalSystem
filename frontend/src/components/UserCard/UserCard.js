@@ -4,10 +4,10 @@ import {
   CardContent,
   Divider,
   Stack,
-  Typography,
+  Typography
 } from "@mui/material";
-import { green, purple } from "@mui/material/colors";
 import Card from "@mui/material/Card";
+import { purple } from "@mui/material/colors";
 import Title from "components/Title/Title";
 import { BASE_URL, EMPLOYEES } from "Constants/apiURLs";
 import { useCallback, useEffect, useState } from "react";
@@ -63,7 +63,7 @@ function UserCard() {
     getEmployeeData();
   }, [getEmployeeData]);
 
-  return user ? (
+  return user.Name ? (
     <Card>
       <CardContent>
         <Box display="flex" alignItems="center" justifyContent="start">

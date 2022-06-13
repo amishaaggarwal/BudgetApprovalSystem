@@ -138,12 +138,14 @@ function BillTable(props) {
                 </TableCell>
                 <TableCell align="center">
                   <Button onClick={() => showBillInfo(row)}>View More</Button>
-                  <Button
-                    onClick={() => approveBill(row.id)}
-                    disabled={row.bill_status}
-                  >
-                    Approve
-                  </Button>
+                  {!props.emp && (
+                    <Button
+                      onClick={() => approveBill(row.id)}
+                      disabled={row.bill_status}
+                    >
+                      Approve
+                    </Button>
+                  )}
                 </TableCell>
               </TableRow>
             ))}
