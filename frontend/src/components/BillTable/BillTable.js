@@ -71,42 +71,35 @@ function BillTable(props) {
       });
   }, [id, token, props.emp]);
 
-  const approveBill = useCallback(
-    (bill_id, client) => {
-      axios
-        .post(`${BASE_URL}${APPROVE_BILL}${bill_id}`, {
+  const approveBill = (bill_id, client) => {
+    axios
+      .post(`${BASE_URL}${APPROVE_BILL}${bill_id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then(() => {
+        let new_data = billData;
+        new_data.forEach((row) => {
+          if (row.id === bill_id) row.bill_status = true;
+        });
+        setBillData(new_data);
+        const notification_push = {
+          notification_text: `Bill Approved by ${email}`,
+          notification_by: id,
+          notification_for: client,
+        };
+        axios.post(`${BASE_URL}${NOTIFICATIONS}${client}`, notification_push, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
-        })
-        .then(() => {
-          let new_data = billData;
-          new_data.forEach((row) => {
-            if (row.id === bill_id) row.bill_status = true;
-          });
-          setBillData(new_data);
-          const notification_push = {
-            notification_text: `Bill Approved by ${email}`,
-            notification_by: id,
-            notification_for: client,
-          };
-          axios.post(
-            `${BASE_URL}${NOTIFICATIONS}${client}`,
-            notification_push,
-            {
-              headers: {
-                Authorization: `Bearer ${token}`,
-              },
-            }
-          );
-           toast.success("Bill approved successfully!", {
-             theme: "dark",
-             position: "top-center",
-           });
         });
-    },
-    [token, billData, email, id]
-  );
+        toast.success("Bill approved successfully!", {
+          theme: "dark",
+          position: "top-center",
+        });
+      });
+  };
   const handleClose = () => {
     setOpenNewBill(false);
   };
