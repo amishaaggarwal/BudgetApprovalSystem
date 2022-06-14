@@ -1,3 +1,4 @@
+import { Tooltip } from "@mui/material";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import { styled } from "@mui/material/styles";
 import Switch from "@mui/material/Switch";
@@ -67,11 +68,12 @@ function ToggleTheme() {
     },
   }));
   return (
-    <FormControlLabel
-      control={<MaterialUISwitch sx={{ m: 1 }} checked={checked} />}
-      label="Change Theme"
-      onChange={handleChange}
-    />
+    <Tooltip title="Change Theme">
+      <FormControlLabel
+        control={<MaterialUISwitch sx={{ m: 1 }} checked={checked} />}
+        onChange={handleChange}
+      />
+    </Tooltip>
   );
 }
 
