@@ -3,10 +3,14 @@ import CurrencyRupeeIcon from "@mui/icons-material/CurrencyRupee";
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import LogoutIcon from "@mui/icons-material/Logout";
 import MenuIcon from "@mui/icons-material/Menu";
+import ArticleIcon from "@mui/icons-material/Article";
+import AccessTimeIcon from "@mui/icons-material/AccessTime";
+import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import {
   Box,
   Divider,
   IconButton,
+  ListSubheader,
   Toolbar,
   Tooltip,
   Typography,
@@ -27,6 +31,8 @@ import { toast } from "react-toastify";
 import { auth } from "util/Firebase/FirebaseSetup";
 import { clearLocalStorage } from "util/Storage/Storage";
 import styles from "./DrawerNHeader.style";
+import Article from "@mui/icons-material/Article";
+import ToggleTheme from "components/ToggleTheme/ToggleTheme";
 
 const drawerWidth = 240;
 const Drawer = styled(MuiDrawer, {
@@ -78,6 +84,9 @@ export const MainListItems = () => {
   ];
   return (
     <React.Fragment>
+      <ListSubheader component="div" inset>
+        General
+      </ListSubheader>
       {mainList.map((row, i) => (
         <Link
           key={i.toString()}
@@ -102,13 +111,48 @@ export const SecondaryListItems = () => {
       label: "My Bills",
       to: "/dashboard/mybills",
     },
+    {
+      icon: <ArticleIcon />,
+      label: "My Activity",
+      to: "/dashboard/coming_soon",
+    },
+  ];
+  const appList = [
+    {
+      icon: <CalendarMonthIcon />,
+      label: "Calendar",
+      to: "/dashboard/coming_soon",
+    },
+    {
+      icon: <AccessTimeIcon />,
+      label: "Clock",
+      to: "/dashboard/coming_soon",
+    },
   ];
   return (
     <React.Fragment>
-      {/* <ListSubheader component="div" inset>
-        Saved reports
-      </ListSubheader> */}
+      <ListSubheader component="div" inset>
+        User Section
+      </ListSubheader>
       {secondaryList.map((row, i) => (
+        <Link
+          key={i}
+          to={row.to}
+          style={{ color: "inherit", textDecoration: "inherit" }}
+        >
+          <ListItemButton display="flex">
+            <Tooltip title={row.label}>
+              <ListItemIcon>{row.icon}</ListItemIcon>
+            </Tooltip>
+            <ListItemText primary={row.label} />
+          </ListItemButton>
+        </Link>
+      ))}
+      <Divider />
+      <ListSubheader component="div" inset>
+        Apps
+      </ListSubheader>
+      {appList.map((row, i) => (
         <Link
           key={i}
           to={row.to}
@@ -195,6 +239,7 @@ export const DrawerNHeader = () => {
           <MainListItems />
           <Divider sx={{ my: 1 }} />
           <SecondaryListItems />
+          <ToggleTheme />
         </List>
       </Drawer>
     </Box>

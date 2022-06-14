@@ -6,12 +6,7 @@ import {
   Toolbar,
   Typography
 } from "@mui/material";
-
-import { ThemeProvider } from "@mui/material/styles";
-import {
-  DrawerNHeader
-} from "components/DrawerNHeader/DrawerNHeader";
-import AppTheme from "Constants/AppTheme";
+import { DrawerNHeader } from "components/DrawerNHeader/DrawerNHeader";
 import { Outlet } from "react-router-dom";
 
 function Copyright(props) {
@@ -34,30 +29,28 @@ function Copyright(props) {
 
 function DashboardContent() {
   return (
-    <ThemeProvider theme={AppTheme}>
-      <Box sx={{ display: "flex" }}>
-        <CssBaseline />
-        <DrawerNHeader />
-        <Box
-          component="main"
-          sx={{
-            backgroundColor: (theme) =>
-              theme.palette.mode === "light"
-                ? theme.palette.grey[100]
-                : theme.palette.grey[900],
-            flexGrow: 1,
-            height: "100vh",
-            overflow: "auto",
-          }}
-        >
-          <Toolbar />
-          <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
-            <Outlet />
-            <Copyright sx={{ pt: 4 }} />
-          </Container>
-        </Box>
+    <Box sx={{ display: "flex" }}>
+      <CssBaseline />
+      <DrawerNHeader />
+      <Box
+        component="main"
+        sx={{
+          backgroundColor: (theme) =>
+            theme.palette.mode === "light"
+              ? theme.palette.grey[100]
+              : theme.palette.grey[900],
+          flexGrow: 1,
+          height: "100vh",
+          overflow: "auto",
+        }}
+      >
+        <Toolbar />
+        <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
+          <Outlet />
+          <Copyright sx={{ pt: 4 }} />
+        </Container>
       </Box>
-    </ThemeProvider>
+    </Box>
   );
 }
 
