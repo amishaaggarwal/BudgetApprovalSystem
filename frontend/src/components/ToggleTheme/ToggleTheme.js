@@ -70,8 +70,9 @@ function ToggleTheme() {
   return (
     <Tooltip title="Change Theme">
       <FormControlLabel
-        control={<MaterialUISwitch sx={{ m: 1 }} checked={checked} />}
+        control={<MaterialUISwitch sx={{ m: 0 }} checked={checked} />}
         onChange={handleChange}
+        sx={{ m: 0 }}
       />
     </Tooltip>
   );

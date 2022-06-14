@@ -220,6 +220,7 @@ export const DrawerNHeader = () => {
           >
             Dashboard
           </Typography>
+          <ToggleTheme />
           <NotificationPanel />
           <Tooltip title="Logout">
             <IconButton color="inherit" onClick={handleLogout}>
@@ -239,7 +240,6 @@ export const DrawerNHeader = () => {
           <MainListItems />
           <Divider sx={{ my: 1 }} />
           <SecondaryListItems />
-          <ToggleTheme />
         </List>
       </Drawer>
     </Box>
