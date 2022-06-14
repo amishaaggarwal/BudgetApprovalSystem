@@ -48,7 +48,6 @@ function NewBill(props) {
 
   const handleSubmit = () => {
     newBill.amount = parseInt(newBill.amount);
-    console.log("Submit", newBill);
     axios
       .post(`${BASE_URL}${BILLS}${data.id}`, newBill, {
         headers: {
@@ -68,6 +67,13 @@ function NewBill(props) {
           },
         });
         toast.success("Bill added successfully", {
+          theme: "dark",
+          position: "top-center",
+        });
+      })
+      .catch((error) => {
+        if( error.response.status===400 );
+        toast.error("You have reached the monthy limit to apply for bills!", {
           theme: "dark",
           position: "top-center",
         });
